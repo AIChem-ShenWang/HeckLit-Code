@@ -28,14 +28,19 @@ Among them, the excel file with "fp" contains the reaction represented by RXNFP 
 
 * exp folder:
 
-  * Heck_Benchmark folder: 
+  * Heck_Benchmark folder: The codes for training & testing 5 ML models with 2 reaction fingerprints.
   
   * Heck_Other folder: 
 
-* figures: 
+    * Heck_Inter&Intra&HeckLit&SGBM_Benchmark.ipynb: The codes for benchmarking HeckLit and its intermolecular, intramolecular subsets and HeckLit with subgroup-based method (SGBM) in different splitting.
+
+    * Heck_SGBM.ipynb: The code for discovering the applicable scenarios of SGBM.
+
+    * Heck_Subset_Benchmark.ipynb: The code for setting the benchmark of the subsets in HeckLit.
+
+* figures folder: 
 
 Some figures generated when analyzing HeckLit.
-
 
 * models folder:
 
