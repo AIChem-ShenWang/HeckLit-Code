@@ -8,15 +8,15 @@ st = int(input("Start cleaning from which row? (start with 0)"))
 cnt = st
 # 1.import data
 if st == 0:
-    data = pd.read_excel("../../data/Heck/Heck preprocessed data1.xlsx").copy()
+    data = pd.read_excel("../data/Heck/Heck preprocessed data1.xlsx").copy()
 else:
-    data = pd.read_excel("../../data/Heck/Heck preprocessed data2.xlsx").copy()
+    data = pd.read_excel("../data/Heck/Heck preprocessed data2.xlsx").copy()
 len_rows = data.shape[0]
 len_cols = data.shape[1] - 1
 
 # 2.handle smi
 # PubChem mode
-path = "../../utils/geckodriver.exe"
+path = "../utils/geckodriver.exe"
 bro = webdriver.Firefox(executable_path=path)
 mol_manager = Mol_Manager(bro=bro)
 
@@ -37,4 +37,4 @@ except:
 bro.quit()
 
 # 3.generate excel
-data.to_excel("../../data/Heck/Heck preprocessed data2.xlsx")
+data.to_excel("../data/Heck/Heck preprocessed data2.xlsx")
