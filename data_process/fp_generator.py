@@ -3,10 +3,10 @@ from utils.rxn import *
 from tqdm import tqdm
 
 # 1.import data
-data_Heck = pd.read_excel("../../data/Heck/Heck processed data.xlsx")
+data_Heck = pd.read_excel("../data/Heck/Heck processed data.xlsx")
 Heck_rxn = df_to_rxn_list(data_Heck)
-data_BH = pd.read_excel("../../data/BH_HTE/BH_HTE_data.xlsx")
-data_Suzuki = pd.read_excel("../../data/Suzuki_HTE/Suzuki_HTE_data.xlsx")
+data_BH = pd.read_excel("../data/BH_HTE/BH_HTE_data.xlsx")
+data_Suzuki = pd.read_excel("../data/Suzuki_HTE/Suzuki_HTE_data.xlsx")
 np.set_printoptions(threshold=np.inf)
 
 # 2.generate rxnfp
@@ -40,7 +40,7 @@ Heck_Reagent_drfp = pd.DataFrame(Heck_Reagent_drfp, columns=["drfp Reagent"])
 Hcek_df = pd.concat([data_Heck,
                      Heck_rxnfp, Heck_React_rxnfp, Heck_Reagent_rxnfp,
                      Heck_drfp, Heck_React_drfp, Heck_Reagent_drfp], axis=1)
-Hcek_df.to_excel("../../data/Heck/Heck_fp.xlsx")
+Hcek_df.to_excel("../data/Heck/Heck_fp.xlsx")
 
 # BH
 BH_rxnfp = list()
@@ -52,7 +52,7 @@ for i in tqdm(range(data_BH.shape[0])):
 BH_rxnfp = pd.DataFrame(BH_rxnfp, columns=["rxnfp"])
 BH_drfp = pd.DataFrame(BH_drfp, columns=["drfp"])
 BH_df = pd.concat([data_BH, BH_rxnfp, BH_drfp], axis=1)
-BH_df.to_excel("../../data/BH_HTE/BH_HTE_fp.xlsx")
+BH_df.to_excel("../data/BH_HTE/BH_HTE_fp.xlsx")
 
 # Suzuki
 Suzuki_rxnfp = list()
@@ -65,4 +65,4 @@ for i in tqdm(range(data_Suzuki.shape[0])):
 Suzuki_rxnfp = pd.DataFrame(Suzuki_rxnfp, columns=["rxnfp"])
 Suzuki_drfp = pd.DataFrame(Suzuki_drfp, columns=["drfp"])
 Suzuki_df = pd.concat([data_Suzuki, Suzuki_rxnfp, Suzuki_drfp], axis=1)
-Suzuki_df.to_excel("../../data/Suzuki_HTE/Suzuki_HTE_fp.xlsx")
+Suzuki_df.to_excel("../data/Suzuki_HTE/Suzuki_HTE_fp.xlsx")
