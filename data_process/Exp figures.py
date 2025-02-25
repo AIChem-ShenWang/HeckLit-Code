@@ -14,7 +14,7 @@ color_num = ["Intra", "Inter", "BH", "Suzuki"]
 # Exp Addtiion
 exp_name = ["Heck Intramolecular", "Heck Intermolecular", "Buchwald HTE", "Suzuki HTE"]
 # Import data
-df = pd.read_excel("../../data/Heck/Heck Exp Addition n=%d.xlsx" % n_basic, sheet_name=None)
+df = pd.read_excel("../data/Heck/Heck Exp Addition n=%d.xlsx" % n_basic, sheet_name=None)
 df_list = [
     df["Intra"],
     df["Inter"],
@@ -54,5 +54,5 @@ plt.ylabel("RMSE", fontsize=11)
 plt.xticks(x_axis, x)
 plt.title("number of Heck Intramolecular=%d" % n_basic, fontsize=16)
 plt.tight_layout()
-plt.savefig("../../figures/Addition Test n=%d.png" % n_basic)
+plt.savefig("../figures/Addition Test n=%d.png" % n_basic)
 # plt.show()
