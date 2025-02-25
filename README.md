@@ -32,7 +32,7 @@ Among them, the excel file with "fp" contains the reaction represented by RXNFP 
   
   * Heck_Other folder: 
 
-    * Heck_Inter&Intra&HeckLit&SGBM_Benchmark.ipynb: The codes for benchmarking HeckLit and its intermolecular, intramolecular subsets and HeckLit with subgroup-based method (SGBM) in different splitting.
+    * Heck_Inter&Intra&HeckLit&SGBM_Benchmark.ipynb: The codes for benchmarking HeckLit and its intermolecular, intramolecular subsets and HeckLit with subgroup-based modeling (SGBM) in different splitting.
 
     * Heck_SGBM.ipynb: The code for discovering the applicable scenarios of SGBM.
 
