@@ -268,8 +268,6 @@ def rxn_list_to_df(rxn_list):
     df = pd.DataFrame(data, columns=cols)
     return df
 
-
-
 # 2.Counting and Filter the rxns
 from rdkit import Chem
 from rdkit.Chem import AllChem
