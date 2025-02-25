@@ -40,7 +40,7 @@ Among them, the excel file with "fp" contains the reaction represented by RXNFP 
 
 * figures folder: 
 
-        Some figures generated when analyzing HeckLit.
+  Some figures generated when analyzing HeckLit.
 
 * models folder:
 
