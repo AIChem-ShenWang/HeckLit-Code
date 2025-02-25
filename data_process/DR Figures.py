@@ -12,7 +12,7 @@ data_color={"Intra":[114/255, 188/255, 213/255],
 
 # 1. import data
 # Intra
-Heck_intra = pd.read_excel("../../data/Heck/Intramolecular data DR.xlsx")
+Heck_intra = pd.read_excel("../data/Heck/Intramolecular data DR.xlsx")
 rxn_intra = df_to_rxn_list(Heck_intra)
 
 # MDS
@@ -51,7 +51,7 @@ intra_reagent_drfp_TSNE2 = Heck_intra["Intra_reagent_drfp_TSNE2"]
 
 
 # Inter
-Heck_inter = pd.read_excel("../../data/Heck/Intermolecular data DR.xlsx")
+Heck_inter = pd.read_excel("../data/Heck/Intermolecular data DR.xlsx")
 rxn_inter = df_to_rxn_list(Heck_inter)
 
 # MDS
@@ -89,7 +89,7 @@ inter_reagent_drfp_TSNE2 = Heck_inter["Inter_reagent_drfp_TSNE2"]
 
 
 # BH
-BH_data = pd.read_excel("../../data/BH_HTE/BH_HTE DR.xlsx")
+BH_data = pd.read_excel("../data/BH_HTE/BH_HTE DR.xlsx")
 # MDS
 # rxnfp
 BH_rxnfp_MDS1 = BH_data["BH_rxnfp_MDS1"]
@@ -101,7 +101,7 @@ BH_drfp_MDS2 = BH_data["BH_drfp_MDS2"]
 
 
 # Suzuki
-Suzuki_data = pd.read_excel("../../data/Suzuki_HTE/Suzuki_HTE DR.xlsx")
+Suzuki_data = pd.read_excel("../data/Suzuki_HTE/Suzuki_HTE DR.xlsx")
 # MDS
 # rxnfp
 Suzuki_rxnfp_MDS1 = Suzuki_data["Suzuki_rxnfp_MDS1"]
@@ -148,7 +148,7 @@ plt.yticks([])
 plt.title("MDS analysis(RXNFP)", fontsize=14)
 plt.legend(["Intermolecular Heck", "Intramolecular Heck", "Buchwald HTE", "Suzuki HTE"], loc="best", prop={'size': 11})
 plt.tight_layout()
-plt.savefig("../../figures/RXNFP MDS Analysis.png")
+plt.savefig("../figures/RXNFP MDS Analysis.png")
 # plt.show()
 
 # drfp
@@ -184,7 +184,7 @@ plt.yticks([])
 plt.title("MDS analysis(DRFP)", fontsize=14)
 plt.legend(["Intermolecular Heck", "Intramolecular Heck", "Buchwald HTE", "Suzuki HTE"], loc="best", prop={'size': 11})
 plt.tight_layout()
-plt.savefig("../../figures/DRFP MDS Analysis.png")
+plt.savefig("../figures/DRFP MDS Analysis.png")
 # plt.show()
 
 # t-SNE
@@ -233,7 +233,7 @@ for i in range(3):
 
 plt.suptitle("Reaction Space described by t-SNE(RXNFP)", fontsize=16)
 plt.tight_layout()
-plt.savefig("../../figures/RXNFP t-SNE Analysis.png")
+plt.savefig("../figures/RXNFP t-SNE Analysis.png")
 # plt.show()
 
 # DRFP
@@ -281,5 +281,5 @@ for i in range(3):
 
 plt.suptitle("Reaction Space described by t-SNE(DRFP)", fontsize=16)
 plt.tight_layout()
-plt.savefig("../../figures/DRFP t-SNE Analysis.png")
+plt.savefig("/figures/DRFP t-SNE Analysis.png")
 # plt.show()
