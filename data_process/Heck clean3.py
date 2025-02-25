@@ -4,7 +4,7 @@ from utils.molecule import *
 import re
 
 # 1. import data
-data = pd.read_excel("../../data/Heck/Heck preprocessed data2.xlsx")
+data = pd.read_excel("../data/Heck/Heck preprocessed data2.xlsx")
 raw_rxn_list = df_to_rxn_list(data)
 smi_rxn_list = list()
 
@@ -50,67 +50,7 @@ for rxn in rxn_list:
 mol_intra = [Chem.MolFromSmiles(rxn.products[0]) for rxn in rxn_intra]
 mol_inter = [Chem.MolFromSmiles(rxn.products[0]) for rxn in rxn_inter]
 
-# # 5.Filling Missing value by interval temperature / time median
-# # intra-molecular
-# intra_yield_region_temp = list()
-# intra_yield_region_time = list()
-# # 10 yield region 0-10, 10-20 ... 90-100
-# for i in range(10):
-#     intra_yield_region_temp.append([])
-#     intra_yield_region_time.append([])
-# for rxn in rxn_intra:
-#     for i in range(0, 100, 10):
-#         if rxn.rxn_yield >= i and rxn.rxn_yield <= i + 10: # in the yield region
-#             if rxn.temp != "/":
-#                 intra_yield_region_temp[int(i / 10)].append(rxn.temp)
-#             if rxn.time != "/":
-#                 intra_yield_region_time[int(i / 10)].append(rxn.time)
-# # Filling Missing Value by median value
-# for rxn in rxn_intra:
-#     if rxn.temp == "/":
-#         for i in range(0, 100, 10):
-#             if rxn.rxn_yield >= i and rxn.rxn_yield <= i + 10:  # in the yield region
-#                 rxn.temp = np.median(np.array(intra_yield_region_temp[int(i / 10)]).astype(float), axis=0)
-#                 break
-#     if rxn.time == "/":
-#         for i in range(0, 100, 10):
-#             if rxn.rxn_yield >= i and rxn.rxn_yield <= i + 10:  # in the yield region
-#                 rxn.time = np.median(np.array(intra_yield_region_time[int(i / 10)]).astype(float), axis=0)
-#                 break
-#
-# # inter-molecular
-# inter_yield_region_temp = list()
-# inter_yield_region_time = list()
-#
-# # 10 yield region 0-10, 10-20 ... 90-100
-# for i in range(10):
-#     inter_yield_region_temp.append([])
-#     inter_yield_region_time.append([])
-# for rxn in rxn_inter:
-#     for i in range(0, 100, 10):
-#         if rxn.rxn_yield >= i and rxn.rxn_yield <= i + 10: # in the yield region
-#             if rxn.temp != "/":
-#                 inter_yield_region_temp[int(i / 10)].append(rxn.temp)
-#             if rxn.time != "/":
-#                 inter_yield_region_time[int(i / 10)].append(rxn.time)
-#
-# # Filling Missing Value by median value
-# for rxn in rxn_inter:
-#     if rxn.temp == "/":
-#         for i in range(0, 100, 10):
-#             if rxn.rxn_yield >= i and rxn.rxn_yield <= i + 10:  # in the yield region
-#                 rxn.temp = np.median(np.array(inter_yield_region_temp[int(i / 10)]).astype(float), axis=0)
-#                 break
-#     if rxn.time == "/":
-#         for i in range(0, 100, 10):
-#             if rxn.rxn_yield >= i and rxn.rxn_yield <= i + 10:  # in the yield region
-#                 rxn.time = np.median(np.array(inter_yield_region_time[int(i / 10)]).astype(float), axis=0)
-#                 break
-#
-# rxn_list = rxn_intra + rxn_inter
-# random.shuffle(rxn_list)
-
-# 6.check smiles again and then create a new database
+# 5.check smiles again and then create a new database
 checked_rxn_list = list()
 for rxn in rxn_list:
     if smi_checker(rxn):
@@ -118,4 +58,4 @@ for rxn in rxn_list:
 
 print("There are %d case(s) in the dataset" % len(checked_rxn_list))
 df = rxn_list_to_df(checked_rxn_list)
-df.to_excel("../../data/Heck/Heck processed data.xlsx")
+df.to_excel("../data/Heck/Heck processed data.xlsx")
