@@ -1,20 +1,20 @@
-This project is the code for the paper "Multi-modal homogeneous chemical reaction performance prediction with graph and chemical language information", including the dataset used and the code for model training, testing, and interpretive result generation.
+This project is the code for the paper "A Benchmarking Study of a Large-scale Heck Reaction Yield Dataset using Subgroup-based Modeling", including the dataset used and the code for model training, testing, and interpretive result generation.
 
-The project uses Python in combination with the gpu provided by the Colab (https://colab.research.google.com/) to build and train the model.The required python version and python libraries are listed in pkgs.txt.
+The project uses Python in combination with the GPU provided by the Colab (https://colab.research.google.com/) to build and train the model.The required python version and python libraries are listed in pkgs.txt.
 
-The project consists of 4 folders: data, exp, models, utils. Each of which is described below.
+The project consists of 6 folders: data, data_process, exp, figures, models, utils. Each of which is described below.
 
 * data folder:
 
-  * BH_HTE: Buchwald-Hartwig reaction high-throughput dataset
+  * BH_HTE: Buchwald-Hartwig reaction high-throughput experimentation dataset
 
-  * Suzuki_HTE: Suzuki-Miyaura reaction high-throughput dataset
+  * Suzuki_HTE: Suzuki-Miyaura reaction high-throughput  experimentation dataset
 
-  * AT: Asymmetric thiol addition reaction high-throughput dataset
+  * Heck: HeckLit literature-based yield dataset, constructed based on Reaxys (https://www.reaxys.com)
 
-  * SNAr: Nucleophilic aromatic substitution reactio literature-based dataset
+Among them, 
 
-  * ELN: ELN dataset
+* data_process folder:
 
 * exp folder:
 
@@ -23,6 +23,11 @@ The project consists of 4 folders: data, exp, models, utils. Each of which is de
   * Interpretability: Codes for generating model interpretability results
  
   * LVA: Codes and results for the analysis of latent vetors in different modality
+
+* figures
+
+
+
 
 * models folder:
 
