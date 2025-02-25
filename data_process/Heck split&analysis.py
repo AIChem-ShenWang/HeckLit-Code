@@ -10,9 +10,9 @@ import umap
 np.set_printoptions(threshold=np.inf)
 
 # 1.import data
-data_Heck = pd.read_excel("../../data/Heck/Heck_fp.xlsx")
-data_BH = pd.read_excel("../../data/BH_HTE/BH_HTE_fp.xlsx")
-data_Suzuki = pd.read_excel("../../data/Suzuki_HTE/Suzuki_HTE_fp.xlsx")
+data_Heck = pd.read_excel("../data/Heck/Heck_fp.xlsx")
+data_BH = pd.read_excel("../data/BH_HTE/BH_HTE_fp.xlsx")
+data_Suzuki = pd.read_excel("../data/Suzuki_HTE/Suzuki_HTE_fp.xlsx")
 
 
 # 2.convert df into rxn_class list
@@ -50,8 +50,8 @@ data_color={"Intra":[114/255, 188/255, 213/255],
 df_intra = rxn_list_to_df(rxn_intra)
 df_inter = rxn_list_to_df(rxn_inter)
 # Split datasets by reaction diversity
-if os.path.exists("../../data/Heck/Subsets") == False:
-    os.mkdir("../../data/Heck/Subsets")
+if os.path.exists("../data/Heck/Subsets") == False:
+    os.mkdir("../data/Heck/Subsets")
 
 # Intra
 Intra_Insertion = [[], []] # Alpha, Beta
@@ -96,7 +96,7 @@ for i in range(len(Intra_Insertion)):
         [rxn_list_to_df([case[0] for case in Intra_Insertion[i]]),
            pd.DataFrame([case[1] for case in Intra_Insertion[i]], columns=["rxnfp"]),
            pd.DataFrame([case[2] for case in Intra_Insertion[i]], columns=["drfp"])], axis=1).to_excel(
-        "../../data/Heck/Subsets/Intramolecular %s-Insertion.xlsx" % InsertionType[i])
+        "../data/Heck/Subsets/Intramolecular %s-Insertion.xlsx" % InsertionType[i])
 # LG
 LGType = ["F", "Cl", "Br", "I", "other"]
 for i in range(len(Intra_LG)):
@@ -104,7 +104,7 @@ for i in range(len(Intra_LG)):
         [rxn_list_to_df([case[0] for case in Intra_LG[i]]),
            pd.DataFrame([case[1] for case in Intra_LG[i]], columns=["rxnfp"]),
            pd.DataFrame([case[2] for case in Intra_LG[i]], columns=["drfp"])], axis=1).to_excel(
-        "../../data/Heck/Subsets/Intramolecular LG = %s.xlsx" % LGType[i])
+        "../data/Heck/Subsets/Intramolecular LG = %s.xlsx" % LGType[i])
 # Ring Size
 RSType = [5, 6, 7, 8, 9]
 for i in range(len(Intra_RS)):
@@ -112,7 +112,7 @@ for i in range(len(Intra_RS)):
         [rxn_list_to_df([case[0] for case in Intra_RS[i]]),
            pd.DataFrame([case[1] for case in Intra_RS[i]], columns=["rxnfp"]),
            pd.DataFrame([case[2] for case in Intra_RS[i]], columns=["drfp"])], axis=1).to_excel(
-        "../../data/Heck/Subsets/Intramolecular %s-membered Ring.xlsx" % RSType[i])
+        "../data/Heck/Subsets/Intramolecular %s-membered Ring.xlsx" % RSType[i])
 
 # Inter
 Inter_Insertion = [[], []] # Alpha, Beta
@@ -144,7 +144,7 @@ for i in range(len(Inter_Insertion)):
         [rxn_list_to_df([case[0] for case in Inter_Insertion[i]]),
            pd.DataFrame([case[1] for case in Inter_Insertion[i]], columns=["rxnfp"]),
            pd.DataFrame([case[2] for case in Inter_Insertion[i]], columns=["drfp"])], axis=1).to_excel(
-        "../../data/Heck/Subsets/Intermolecular %s-Insertion.xlsx" % InsertionType[i])
+        "../data/Heck/Subsets/Intermolecular %s-Insertion.xlsx" % InsertionType[i])
 # LG
 LGType = ["F", "Cl", "Br", "I", "other"]
 for i in range(len(Inter_LG)):
@@ -152,7 +152,7 @@ for i in range(len(Inter_LG)):
         [rxn_list_to_df([case[0] for case in Inter_LG[i]]),
            pd.DataFrame([case[1] for case in Inter_LG[i]], columns=["rxnfp"]),
            pd.DataFrame([case[2] for case in Inter_LG[i]], columns=["drfp"])], axis=1).to_excel(
-        "../../data/Heck/Subsets/Intermolecular LG = %s.xlsx" % LGType[i])
+        "../data/Heck/Subsets/Intermolecular LG = %s.xlsx" % LGType[i])
 
 # 4.counting for rxn
 report = open("Dataset Report.txt", mode="w+")
@@ -219,7 +219,7 @@ ax[1].set_xticks([i for i in range(len(label))], label, rotation=20, fontsize=9)
 
 plt.suptitle("Heck Reaction Diversity", fontsize=18)
 plt.tight_layout()
-plt.savefig("../../figures/Reaction Diversity.png")
+plt.savefig("../figures/Reaction Diversity.png")
 # plt.show()
 
 
@@ -288,7 +288,7 @@ for i in range(3):
     ax[i].set_title("%s Distribution" % attr[i], fontsize=16)
 fig.suptitle("Time/Temperature/Yield Distribution for Heck Reaction", fontsize=18)
 plt.tight_layout()
-plt.savefig("../../figures/Time Temperature Yield Distribution.png")
+plt.savefig("../figures/Time Temperature Yield Distribution.png")
 # plt.show()
 
 
@@ -336,7 +336,7 @@ plt.xticks([1, 1.6, 2.2], ["Heck", "Buchwald HTE", "Suzuki HTE"], fontsize=10)
 plt.ylabel("Yield(%)", fontsize=10)
 plt.title("Yield for Different Datasets", fontsize=12)
 plt.tight_layout()
-plt.savefig("../../figures/Yield Distribution Comparison.png")
+plt.savefig("../figures/Yield Distribution Comparison.png")
 plt.show()
 
 
@@ -381,7 +381,7 @@ for i in range(5):
     plt.ylabel("Yield", fontsize=8)
     plt.legend(type, ["Few-shot", "Medium-shot", "Many-shot"])
     plt.tight_layout()
-    plt.savefig("../../figures/%s Yield Distribution.png" % yield_name[i])
+    plt.savefig("../figures/%s Yield Distribution.png" % yield_name[i])
 
 
 # 8.MDS analysis for RXNFP & DRFP
@@ -519,7 +519,7 @@ plt.ylabel("Density", fontsize=11)
 plt.yticks([])
 plt.title("Cosine Similarity Distribution(RXNFP)", fontsize=14)
 plt.tight_layout()
-plt.savefig("../../figures/RXNFP Cosine Similarity density.png")
+plt.savefig("../figures/RXNFP Cosine Similarity density.png")
 # plt.show()
 
 # DRFP
@@ -538,7 +538,7 @@ plt.ylabel("Density", fontsize=11)
 plt.yticks([])
 plt.title("Cosine Similarity Distribution(DRFP)", fontsize=14)
 plt.tight_layout()
-plt.savefig("../../figures/DRFP Cosine Similarity density.png")
+plt.savefig("../figures/DRFP Cosine Similarity density.png")
 # plt.show()
 
 
@@ -571,7 +571,7 @@ for i in range(3):
     ax[i].set_ylabel("Reaction Coverage", fontsize=12)
     ax[i].grid(True, alpha=0.5, linestyle="--")
 plt.tight_layout()
-plt.savefig("../../figures/Reagents Diversity.png")
+plt.savefig("../figures/Reagents Diversity.png")
 # plt.show()
 
 
@@ -667,7 +667,7 @@ tsne2 = pd.DataFrame(embeded_tsne[:, 1], columns=["Inter_reagent_drfp_TSNE2"])
 df_inter = pd.concat([df_inter, tsne1, tsne2], axis=1)
 
 # Generate DR data
-df_intra.to_excel("../../data/Heck/Intramolecular data DR.xlsx")
-df_inter.to_excel("../../data/Heck/Intermolecular data DR.xlsx")
-data_BH.to_excel("../../data/BH_HTE/BH_HTE DR.xlsx")
-data_Suzuki.to_excel("../../data/Suzuki_HTE/Suzuki_HTE DR.xlsx")
+df_intra.to_excel("../data/Heck/Intramolecular data DR.xlsx")
+df_inter.to_excel("../data/Heck/Intermolecular data DR.xlsx")
+data_BH.to_excel("../data/BH_HTE/BH_HTE DR.xlsx")
+data_Suzuki.to_excel("../data/Suzuki_HTE/Suzuki_HTE DR.xlsx")
