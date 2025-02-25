@@ -6,7 +6,7 @@ import rdkit.Chem
 import rdkit.Chem.AllChem
 
 # import data
-data = pd.read_excel("../../data/Heck/Heck raw data.xlsx")
+data = pd.read_excel("../data/Heck/Heck raw data.xlsx")
 rxn_list = df_to_rxn_list(data)
 rxn_selected = list()
 
@@ -65,4 +65,4 @@ for rxn in rxn_list:
         print("Processing: %.2f" % (cnt / len(rxn_list) * 100), "%")
 
 df = rxn_list_to_df(rxn_selected)
-df.to_excel("../../data/Heck/Heck preprocessed data1.xlsx")
+df.to_excel("../data/Heck/Heck preprocessed data1.xlsx")
