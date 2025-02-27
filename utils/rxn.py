@@ -56,7 +56,7 @@ class RXN():
                 if len(re.findall(".+[^;\xa0]", rea)) == 0:
                     self.reagents.append(rea)
                 else:
-                    rea = re.findall(".+[^;\xa0]", rea)[0] # html文本中有奇怪字符
+                    rea = re.findall(".+[^;\xa0]", rea)[0]
                     self.reagents.append(rea)
         # catalyst
         rxn_c = rxn_index.xpath("./span[@class='stage-catalyst']")
