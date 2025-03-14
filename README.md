@@ -1,4 +1,4 @@
-This project is the code for the paper "A Benchmarking Study of a Large-scale Heck Reaction Yield Dataset using Subgroup-based Modeling", including the dataset used and the code for dataset processing & analysis, model training & testing.
+This project is the code for the paper "HeckLit: A benchmarking study of a literature-based large-scale Heck reaction yield dataset", including the dataset used and the code for dataset processing & analysis, model training & testing.
 
 The project uses Python in combination with the CPU & GPU provided by the Colab (https://colab.research.google.com/) to build and train the model.The required python version and python libraries are listed in pkgs.txt.
 
