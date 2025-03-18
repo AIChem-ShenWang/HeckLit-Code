@@ -189,11 +189,11 @@ for i in range(len(num)):
     if i > 5:
         ax[0].bar(x=i, height=num[i], color="#d0d8eb", edgecolor="#7195c5")
 for i in range(len(label)):
-    ax[0].text(i, num[i] + 0.6, '%.1f' % num[i] + "%", ha='center', va='center', fontsize=9)
+    ax[0].text(i, num[i] + 0.8, '%.1f' % num[i] + "%", ha='center', va='center', fontsize=12)
 
-ax[0].set_title("Intramolecular Dataset", fontsize=16)
+ax[0].set_title("Intramolecular Dataset", fontsize=17)
 ax[0].set_ylabel("% of Intramolecular Dataset", fontsize=16)
-ax[0].set_xticks([i for i in range(len(label))], label, rotation=20, fontsize=9)
+ax[0].set_xticks([i for i in range(len(label))], label, rotation=40, fontsize=12)
 
 # Inter
 label = list()
@@ -211,11 +211,11 @@ for i in range(len(num)):
 
 # label
 for i in range(len(label)):
-    ax[1].text(i, num[i] + 1.2, '%.1f' % num[i] + "%", ha='center', va='center', fontsize=9)
+    ax[1].text(i, num[i] + 1.2, '%.1f' % num[i] + "%", ha='center', va='center', fontsize=12)
 
-ax[1].set_title("Intermolecular Dataset", fontsize=16)
+ax[1].set_title("Intermolecular Dataset", fontsize=17)
 ax[1].set_ylabel("% of Intermolecular Dataset", fontsize=16)
-ax[1].set_xticks([i for i in range(len(label))], label, rotation=20, fontsize=9)
+ax[1].set_xticks([i for i in range(len(label))], label, rotation=40, fontsize=12)
 
 plt.suptitle("Heck Reaction Diversity", fontsize=18)
 plt.tight_layout()
@@ -561,15 +561,17 @@ ax[1].plot(x_label, inter_sol, color=[117/255, 157/255, 219/255], marker="s")
 ax[2].plot(x_label, total_cat, color=[236/255, 164/255, 124/255], marker="^")
 ax[2].plot(x_label, total_sol, color=[117/255, 157/255, 219/255], marker="s")
 # beautify
-fig.suptitle("Reagents Diversity", fontsize=16)
-ax[0].set_title("Intramolecular", fontsize=14)
-ax[1].set_title("Intermolecular", fontsize=14)
-ax[2].set_title("Total", fontsize=14)
+fig.suptitle("Reagents Diversity", fontsize=20)
+ax[0].set_title("Intramolecular", fontsize=18)
+ax[1].set_title("Intermolecular", fontsize=18)
+ax[2].set_title("Total", fontsize=18)
 for i in range(3):
-    ax[i].legend(["catalysts", "solvents"], loc="upper left", prop={'size': 10})
-    ax[i].set_xlabel("Top N", fontsize=12)
-    ax[i].set_ylabel("Reaction Coverage", fontsize=12)
+    ax[i].legend(["catalysts", "solvents"], loc="lower left", prop={'size': 14})
+    ax[i].set_xlabel("Top N", fontsize=14)
+    ax[i].set_ylabel("Reaction Coverage", fontsize=14)
     ax[i].grid(True, alpha=0.5, linestyle="--")
+    ax[i].tick_params(axis='x', labelsize=12)
+    ax[i].tick_params(axis='y', labelsize=12)
 plt.tight_layout()
 plt.savefig("../figures/Reagents Diversity.png")
 # plt.show()
