@@ -46,6 +46,7 @@ Among them, the excel file with "fp" contains the reaction represented by RXNFP 
 
   * ANN.py: The framework of Artificial Neural Network (ANN). Other ML models is built by sklearn Python package.
 
+  * fds.py: Feature distribution smooth operation. Code is from Yang et al. (arXiv 2021, DOI: arXiv:2102.09554).
 
 * utils folder: 
 
