@@ -2,10 +2,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
+from .fds import *
 
 # 5-Layer ANN Regressor
 class ANN(nn.Module):
-    def __init__(self, input_size):
+    def __init__(self, input_size, FDS=None):
         super(ANN, self).__init__()
         self.input_size = input_size
         self.encoder = nn.Sequential(
@@ -23,11 +24,16 @@ class ANN(nn.Module):
             nn.ReLU(),
             nn.Linear(100, 1)
         )
+        self.FDS = FDS
 
-
-    def forward(self, x):
+    def forward(self, x, y, epoch, device):
       x = self.encoder(x)
-      x = self.decoder(x)
+      if self.FDS is not None:
+            if epoch >= 1:
+                self.FDS.cpu()
+                x = self.FDS.smooth(x.cpu(), y.cpu(), epoch).to(device)
+                y = y.to(device)
+      x = self.decoder(x.to(device))
       return x
 
 # Model Evaluation Function
