@@ -54,7 +54,7 @@ Among them, the excel file with "fp" contains the reaction represented by RXNFP 
 
 * models folder:
 
-  * DeepLearnModel.py: The framework of Artificial Neural Network (ANN), GAT and MMHRP-GCL which is proposed by us. (_Chin. J. Chem._ **2025**, _43_, 1230 – 1238). Other ML models is built by sklearn Python package.
+  * DeepLearnModel.py: The framework of Artificial Neural Network (ANN), GAT and MMHRP-GCL proposed by us. (_Chin. J. Chem._ **2025**, _43_, 1230 – 1238). Other ML models is built by sklearn Python package.
 
   * fds.py: Feature distribution smooth operation. Code is from Yang et al. (arXiv 2021, DOI: arXiv:2102.09554).
 
