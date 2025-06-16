@@ -5,12 +5,14 @@ from tqdm import tqdm
 # 1.import data
 data_Heck = pd.read_excel("../data/Heck/Heck processed data.xlsx")
 Heck_rxn = df_to_rxn_list(data_Heck)
+data_JCP = pd.read_excel("../data/Heck/JCP processed data.xlsx")
 data_BH = pd.read_excel("../data/BH_HTE/BH_HTE_data.xlsx")
 data_Suzuki = pd.read_excel("../data/Suzuki_HTE/Suzuki_HTE_data.xlsx")
 np.set_printoptions(threshold=np.inf)
 
 # 2.generate rxnfp
 # Heck
+# HeckLit
 Heck_rxnfp = list()
 Heck_React_rxnfp = list()
 Heck_Reagent_rxnfp = list()
@@ -41,6 +43,19 @@ Hcek_df = pd.concat([data_Heck,
                      Heck_rxnfp, Heck_React_rxnfp, Heck_Reagent_rxnfp,
                      Heck_drfp, Heck_React_drfp, Heck_Reagent_drfp], axis=1)
 Hcek_df.to_excel("../data/Heck/Heck_fp.xlsx")
+
+# JCP
+# BH
+JCP_rxnfp = list()
+JCP_drfp = list()
+for i in tqdm(range(data_JCP.shape[0])):
+    rxn = data_JCP.loc[i]
+    JCP_rxnfp.append(str(get_JCP_Heck_rxnfp(rxn)))
+    JCP_drfp.append(str(get_JCP_Heck_drfp(rxn)))
+JCP_rxnfp = pd.DataFrame(JCP_rxnfp, columns=["rxnfp"])
+JCP_drfp = pd.DataFrame(JCP_drfp, columns=["drfp"])
+JCP_df = pd.concat([data_JCP, JCP_rxnfp, JCP_drfp], axis=1)
+JCP_df.to_excel("../data/Heck/JCP processed data.xlsx", index=False)
 
 # BH
 BH_rxnfp = list()

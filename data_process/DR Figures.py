@@ -281,5 +281,5 @@ for i in range(3):
 
 plt.suptitle("Reaction Space described by t-SNE(DRFP)", fontsize=16)
 plt.tight_layout()
-plt.savefig("/figures/DRFP t-SNE Analysis.png")
+plt.savefig("../figures/DRFP t-SNE Analysis.png")
 # plt.show()

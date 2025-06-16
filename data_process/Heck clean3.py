@@ -1,4 +1,5 @@
 import random
+import numpy as np
 from utils.rxn import *
 from utils.molecule import *
 import re
@@ -56,6 +57,82 @@ for rxn in rxn_list:
     if smi_checker(rxn):
         checked_rxn_list.append(rxn)
 
+rxn_list = checked_rxn_list
 print("There are %d case(s) in the dataset" % len(checked_rxn_list))
-df = rxn_list_to_df(checked_rxn_list)
+
+# 5.Calculate the average yield for the same reaction
+rxn_dict = {}
+for i in tqdm(range(len(rxn_list))):
+    rxn = rxn_list[i]
+    # Chemical dict
+    chem_list = rxn.reactants + rxn.reagents + rxn.cats + rxn.solvents + rxn.products
+    chem_dict = {}
+    for chem in chem_list:
+        if chem not in chem_dict.keys():
+            chem_dict[chem] = 0
+    chem_list = []
+    for chem in chem_dict.keys():
+        chem_list.append(chem)
+    chem_names = str(chem_list)
+
+    # if 2 reaction have the same chemicals
+    for j in rxn_dict.keys():
+        if j == chem_names:
+            if isinstance(rxn_dict[j].rxn_id, list):
+                if rxn.rxn_id not in rxn_dict[j].rxn_id:
+                    # Yield
+                    rxn_dict[j].rxn_yield.append(rxn.rxn_yield)
+                    rxn.rxn_yield = rxn_dict[j].rxn_yield
+                    # time
+                    rxn_dict[j].time.append(rxn.time)
+                    rxn.time = rxn_dict[j].time
+                    # temp
+                    rxn_dict[j].temp.append(rxn.temp)
+                    rxn.temp = rxn_dict[j].temp
+                    # rxn_id
+                    rxn_dict[j].rxn_id.append(rxn.rxn_id)
+                    rxn.rxn_id = rxn_dict[j].rxn_id
+                    # ref
+                    rxn_dict[j].ref.append(rxn.ref)
+                    rxn.ref = rxn_dict[j].ref
+            else:
+                if rxn.rxn_id != rxn_dict[j].rxn_id:
+                    # Yield
+                    rxn.rxn_yield = [rxn.rxn_yield, rxn_dict[j].rxn_yield]
+                    # time
+                    rxn.time = [rxn.time, rxn_dict[j].time]
+                    # temp
+                    rxn.temp = [rxn.temp, rxn_dict[j].temp]
+                    # rxn_id
+                    rxn.rxn_id = [rxn.rxn_id, rxn_dict[j].rxn_id]
+                    # ref
+                    rxn.ref = [rxn.ref, rxn_dict[j].ref]
+
+    rxn_dict[chem_names] = rxn
+
+rxn_list = []
+
+for key in rxn_dict.keys():
+    rxn = rxn_dict[key]
+    if isinstance(rxn.rxn_yield, list):
+        rxn.rxn_yield = np.array([float(item) for item in rxn.rxn_yield]).mean()
+        # temp
+        try:
+            if all(item == '/' for item in rxn.temp):
+                rxn.temp = "/"
+            else:
+                rxn.temp = np.array([float(item) for item in rxn.temp if item != '/' and item is not None]).mean()
+        except:
+            rxn.temp = "/"
+        # time
+        try:
+            if all(item == '/' for item in rxn.time):
+                rxn.time = "/"
+            else:
+                rxn.time = np.array([float(item) for item in rxn.time if item != '/' and item is not None]).mean()
+        except:
+            rxn.time = "/"
+    rxn_list.append(rxn_dict[key])
+
+df = rxn_list_to_df(rxn_list)
 df.to_excel("../data/Heck/Heck processed data.xlsx")

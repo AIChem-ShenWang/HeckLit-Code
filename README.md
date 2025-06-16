@@ -1,6 +1,6 @@
 This project is the code for the paper "HeckLit: A benchmarking study of a literature-based large-scale Heck reaction yield dataset", including the dataset used and the code for dataset processing & analysis, model training & testing.
 
-The project uses Python in combination with the CPU & GPU provided by the Colab (https://colab.research.google.com/) to build and train the model.The required python version and python libraries are listed in pkgs.txt.
+The project uses Python in combination with the CPU & GPU provided by the Colab (https://colab.research.google.com) to build and train the model.The required python version and python libraries are listed in pkgs.txt.
 
 The project consists of 6 folders: data, data_process, exp, figures, models, utils. Each of which is described below.
 
@@ -10,7 +10,9 @@ The project consists of 6 folders: data, data_process, exp, figures, models, uti
 
   * Suzuki_HTE: Suzuki-Miyaura reaction high-throughput  experimentation dataset
 
-  * Heck: HeckLit literature-based yield dataset, constructed based on Reaxys (https://www.reaxys.com)
+  * Heck: Heck literature-based yield dataset, named "HeckLit", constructed based on Reaxys (https://www.reaxys.com), and Das et al. Heck experimental dataset, named "JCP". (_J. Chem. Phys._ **2025**, _156_, 114303)
+
+  * v1.5 Reaxys crawler: Reaxys crawler for extracting data from Reaxys website
 
 Among them, the excel file with "fp" contains the reaction represented by RXNFP & DRFP. the excel file with "RxnSmi" contains the reaction represented in Reaction SMILES format.
 
@@ -18,7 +20,7 @@ Among them, the excel file with "fp" contains the reaction represented by RXNFP 
 
   * Heck clean1.py, Heck clean2.py, Heck clean3.py: The Python file to conduct data cleaning.
 
-  * Heck split&analysis.py: The Python file for HeckLit splitting & analysis, as well as comparision with HTE datasets.
+  * Heck split&analysis.py: The Python file for HeckLit splitting & analysis.
 
   * fp_generator.py: The programme to generate RXNFP & DRFP for chemical reactions.
 
@@ -28,30 +30,47 @@ Among them, the excel file with "fp" contains the reaction represented by RXNFP 
 
 * exp folder:
 
-  * Heck_Benchmark folder: The codes for training & testing 5 ML models with 2 reaction fingerprints.
+  * Heck_Benchmark folder: The codes for training & testing models on HeckLit dataset.
+
+  * Heck_JCP:  The codes for training & testing models on JCP dataset.
   
   * Heck_Other folder: 
 
-    * Heck_Inter&Intra&HeckLit&SGBM_Benchmark.ipynb: The codes for benchmarking HeckLit and its intermolecular, intramolecular subsets and HeckLit with subgroup-based modeling (SGBM) in different splitting.
+    * Ablation.ipynb: Ablation study of reagents' information.
 
-    * Heck_SGBM.ipynb: The code for discovering the applicable scenarios of SGBM.
+    * FDS.ipynb: Feature Distribution Smooth (FDS) method to improve the model learning performance on HeckLit.
 
-    * Heck_Subset_Benchmark.ipynb: The code for setting the benchmark of the subsets in HeckLit.
+    * Generalization.ipynb: Model generalization test using low-shot and medium shot reactions to train and many-shot cases to test.
+
+    * ShotErrorPlot.ipynb: Model testing error distribution caused by reaction yield distribution.
+
+    * STS.ipynb: Subset Splitting training strategy (SSTS) to improve the model learning performance on HeckLit.
+
+    * Subset_Benchmark.ipynb: The code for setting the benchmark of the subsets in HeckLit.
 
 * figures folder: 
 
-  Some figures generated when analyzing HeckLit.
+  Figures generated when analyzing & testing on HeckLit.
 
 * models folder:
 
-  * ANN.py: The framework of Artificial Neural Network (ANN). Other ML models is built by sklearn Python package.
+  * DeepLearnModel.py: The framework of Artificial Neural Network (ANN), GAT and MMHRP-GCL which is proposed by us. (_Chin. J. Chem._ **2025**, _43_, 1230 – 1238). Other ML models is built by sklearn Python package.
 
   * fds.py: Feature distribution smooth operation. Code is from Yang et al. (arXiv 2021, DOI: arXiv:2102.09554).
 
+  * smi2vec.py: Smi2Vec models for generating vocab dict for each atom.
+
+  * HeckLit_vocab.txt, JCP_vocab.txt: Vocab dictory for MMHRP-GCL model test on HeckLit and JCP datasets.
+
 * utils folder: 
 
-  * dataset_analysis.py: Some functions helps with data analysis. 
+  * dataset_analysis.py: Functions helps with data analysis. 
 
   * molecule.py, rxn.py: The py files are auxiliary toolkits for dealing with molecules and reaction data.
+
+  * geckodriver.exe: The driver to use PubChem (https://pubchem.ncbi.nlm.nih.gov) to convert compound IUPAC to SMILES.
+
+  * solvent polarity index.txt: The index to determine whether the solvent is polar.
+
 
 

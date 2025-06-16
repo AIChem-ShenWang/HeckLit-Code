@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from sklearn.manifold import MDS
 from utils.rxn import *
@@ -17,7 +18,6 @@ data_Suzuki = pd.read_excel("../data/Suzuki_HTE/Suzuki_HTE_fp.xlsx")
 
 # 2.convert df into rxn_class list
 rxn_list = df_to_rxn_list(data_Heck)
-
 
 # 3.divide into intra & inter and other subsets
 rxn_intra = list() # intra
@@ -136,6 +136,7 @@ for i in tqdm(range(len(rxn_inter))):
         Inter_LG[3].append([rxn, rxnfp_inter[i], drfp_inter[i]])
     if Type_LG == "*":
         Inter_LG[4].append([rxn, rxnfp_inter[i], drfp_inter[i]])
+
 # Generate excel
 # Insertion
 InsertionType = ["Alpha", "Beta"]
@@ -251,6 +252,7 @@ for rxn in rxn_list:
     total_yield_dis.append(rxn.rxn_yield)
 
 attr = ["Time", "Temperature", "Yield"]
+unit = ["h", "℃", "%"]
 name = ["Intramolecular", "Intermolecular"]
 
 fig, ax = plt.subplots(nrows=3, dpi=500, figsize=(8, 12))
@@ -283,7 +285,7 @@ for p in vio_part:
 
 # beautify
 for i in range(3):
-    ax[i].set_ylabel("%s" % attr[i], fontsize=14)
+    ax[i].set_ylabel("%s(%s)" % (attr[i], unit[i]), fontsize=14)
     ax[i].set_xticks([1, 1.8], name, fontsize=14)
     ax[i].set_title("%s Distribution" % attr[i], fontsize=16)
 fig.suptitle("Time/Temperature/Yield Distribution for Heck Reaction", fontsize=18)
@@ -337,7 +339,7 @@ plt.ylabel("Yield(%)", fontsize=10)
 plt.title("Yield for Different Datasets", fontsize=12)
 plt.tight_layout()
 plt.savefig("../figures/Yield Distribution Comparison.png")
-plt.show()
+# plt.show()
 
 
 # 7. Yield distribution with reaction number
@@ -566,7 +568,7 @@ ax[0].set_title("Intramolecular", fontsize=18)
 ax[1].set_title("Intermolecular", fontsize=18)
 ax[2].set_title("Total", fontsize=18)
 for i in range(3):
-    ax[i].legend(["catalysts", "solvents"], loc="lower left", prop={'size': 14})
+    ax[i].legend(["catalysts", "solvents"], loc="lower right", prop={'size': 14})
     ax[i].set_xlabel("Top N", fontsize=14)
     ax[i].set_ylabel("Reaction Coverage", fontsize=14)
     ax[i].grid(True, alpha=0.5, linestyle="--")
@@ -673,3 +675,110 @@ df_intra.to_excel("../data/Heck/Intramolecular data DR.xlsx")
 df_inter.to_excel("../data/Heck/Intermolecular data DR.xlsx")
 data_BH.to_excel("../data/BH_HTE/BH_HTE DR.xlsx")
 data_Suzuki.to_excel("../data/Suzuki_HTE/Suzuki_HTE DR.xlsx")
+
+# 11. The effect of solvent & cat
+# 11.1 Solvent polarity effect on yield
+sols_dict = {"Polar":[],
+            "Mixture":[],
+            "Nonpolar":[]}
+
+for i in range(len(rxn_list)):
+    rxn = rxn_list[i]
+    sols = rxn.solvents
+    sols_type = []
+    for sol in sols:
+        sols_type.append(PolarType(sol, "../utils/solvent polarity index.txt"))
+    if "Polar" in sols_type and "Nonpolar" in sols_type:
+        sols_dict["Mixture"].append(rxn.rxn_yield)
+    if "Polar" in sols_type and "Nonpolar" not in sols_type:
+        sols_dict["Polar"].append(rxn.rxn_yield)
+    if "Polar" not in sols_type and "Nonpolar" in sols_type:
+        sols_dict["Nonpolar"].append(rxn.rxn_yield)
+
+plt.figure(dpi=500, figsize=(10, 7))
+sols_name = []
+yield_distribution = []
+for key in sols_dict.keys():
+    sols_name.append(key)
+    yield_distribution.append(sols_dict[key])
+
+# Plot
+plt.violinplot(yield_distribution, showmeans=True)
+plt.title("Solvent Effect", fontsize=16)
+plt.xlabel("Solvent Polarity", fontsize=14)
+plt.xticks(np.linspace(1, len(sols_name), len(sols_name)), sols_name, fontsize=12)
+plt.ylabel("Yield (%)", fontsize=14)
+plt.ylim(0, 100)
+plt.grid(True, alpha=0.7, linestyle="--")
+plt.tight_layout()
+plt.savefig("../figures/Solvent Effect.png")
+
+# 11.2 Pd catalyst effect on yield
+cat_dict = {}
+for i in range(len(rxn_list)):
+    rxn = rxn_list[i]
+    cats = rxn.solvents + rxn.reagents
+    # Get Pd catalyst
+    Pd_cat = str()
+    for cat in cats:
+        if "Pd" in cat:
+            Pd_cat = cat
+    if len(Pd_cat) == 0:
+        continue
+    # add into the dict
+    if Pd_cat not in cat_dict.keys():
+        cat_dict[Pd_cat] = []
+    cat_dict[Pd_cat].append(rxn.rxn_yield)
+
+# Top n cat is analyzed
+top_num = 7
+cat_list = list(zip(cat_dict.keys(), cat_dict.values()))
+cat_list = sorted(cat_list, key=lambda x: len(x[1]), reverse=True)
+assert top_num <= len(cat_list)
+plt.figure(dpi=500, figsize=(12, 7))
+yield_distribution = []
+cat_name = []
+cat_smi = []
+for i in range(top_num):
+    yield_distribution.append(cat_list[i][1])
+    cat_name.append(cat_list[i][0])
+    cat_smi.append(cat_list[i][0])
+
+# Handling catalyst SMILES
+n = 20
+for j in range(len(cat_name)):
+    cat_name[j] = "(%s) " % (j + 1) + cat_name[j]
+    cat_name[j] = '\n'.join(cat_name[j][i:i+n] for i in range(0, len(cat_name[j]), n))
+
+
+# Plot
+plt.violinplot(yield_distribution, showmeans=True)
+plt.title("Pd Catalyst Effect", fontsize=16)
+plt.xlabel("Pd Catalyst", fontsize=14)
+plt.xticks(np.linspace(1, top_num, top_num), cat_name, fontsize=9)
+plt.ylabel("Yield (%)", fontsize=14)
+plt.ylim(0, 100)
+plt.grid(True, alpha=0.7, linestyle="--")
+plt.tight_layout()
+plt.savefig("../figures/Pd Cat Effect1.png")
+
+# Plot for molecular structure
+from rdkit import Chem
+from rdkit.Chem import Draw
+
+mols = [Chem.MolFromSmiles(smi) for smi in cat_smi]
+legends = ["Pd(OAc)2", "PdCl2(PPh3)2", "Pd(PPh3)4", "Pd2(dba)3", "PdCl2", "Pd(P(t-Bu)3)4", "Pd(dba)2"]
+for i in range(len(legends)):
+    legends[i] = "(%s) " % (i+1) + legends[i]
+
+sub_img_size = (300, 300)
+img = Draw.MolsToGridImage(
+    mols,
+    molsPerRow=4,
+    subImgSize=sub_img_size,
+    legends=legends,
+    useSVG=True,
+    returnPNG=False,
+)
+with open("../figures/Pd Cat Effect2.svg", mode="w") as f:
+    f.write(img)

@@ -11,6 +11,7 @@ import re
 import pandas as pd
 import torch
 
+# 1.Extraction of rxn data
 class RXN():
     # Prameters of RXN
     def __init__(self):
@@ -56,7 +57,7 @@ class RXN():
                 if len(re.findall(".+[^;\xa0]", rea)) == 0:
                     self.reagents.append(rea)
                 else:
-                    rea = re.findall(".+[^;\xa0]", rea)[0]
+                    rea = re.findall(".+[^;\xa0]", rea)[0] # 
                     self.reagents.append(rea)
         # catalyst
         rxn_c = rxn_index.xpath("./span[@class='stage-catalyst']")
@@ -712,6 +713,24 @@ def read_drfp(arr_str):
         arr_str[i] = float(arr_str[i])
     return np.array(arr_str).astype(np.float16)
 
+def RxnSmi_to_tensor(RxnSmi, maxlen_, victor_size, file):
+    vocab_dict = vocab_txt_to_dict(file) # get vocab_dict
+
+    atoms = RxnSmi.split(" ")
+    embedding_matrix = np.zeros((maxlen_, victor_size))
+
+    for i in range(len(atoms)):
+      atom = atoms[i]
+      embedding_glove_vector = vocab_dict[atom] if atom in vocab_dict else None
+      if embedding_glove_vector is not None:
+        embedding_matrix[i] = embedding_glove_vector
+      else:
+            unk_vec = np.random.random(victor_size) * 0.5
+            unk_vec = unk_vec - unk_vec.mean()
+            embedding_matrix[i] = unk_vec
+
+    return torch.tensor(embedding_matrix, dtype=torch.float32)
+
 def get_Buchwald_RxnSmi(BH_HTE_df):
     base = str(BH_HTE_df.loc["base_smiles"])
     ligand = str(BH_HTE_df.loc["ligand_smiles"])
@@ -980,3 +999,47 @@ def get_Suzuki_drfp(Suzuki_HTE_df):
 
     return drfp
 
+# Heck JCP data
+def get_JCP_Heck_RxnSmi(JCP_Heck_df):
+    sub = str(JCP_Heck_df.loc["sub"])
+    nuc = str(JCP_Heck_df.loc["nuc"])
+    lig = str(JCP_Heck_df.loc["lig"])
+    sol = str(JCP_Heck_df.loc["sol"])
+    add = str(JCP_Heck_df.loc["add"])
+
+    text = [sub] + ["."] + [nuc] + [">"] + [lig] + ["."] + [sol] + ["."] + [add] + [
+        ">"]
+
+    return "".join(text)
+
+def get_JCP_Heck_rxnfp(JCP_Heck_df):
+    sub = str(JCP_Heck_df.loc["sub"])
+    nuc = str(JCP_Heck_df.loc["nuc"])
+    lig = str(JCP_Heck_df.loc["lig"])
+    sol = str(JCP_Heck_df.loc["sol"])
+    add = str(JCP_Heck_df.loc["add"])
+
+    text = [sub] + ["."] + [nuc] + ["."] + [lig] + ["."] + [sol] + ["."] + [add] + [
+        ">>"]
+    text = "".join(text)
+
+    model, tokenizer = get_default_model_and_tokenizer()
+    rxnfp_generator = RXNBERTFingerprintGenerator(model, tokenizer)
+    rxnfp = rxnfp_generator.convert(text)
+
+    return rxnfp
+
+def get_JCP_Heck_drfp(JCP_Heck_df):
+    sub = str(JCP_Heck_df.loc["sub"])
+    nuc = str(JCP_Heck_df.loc["nuc"])
+    lig = str(JCP_Heck_df.loc["lig"])
+    sol = str(JCP_Heck_df.loc["sol"])
+    add = str(JCP_Heck_df.loc["add"])
+
+    text = [sub] + ["."] + [nuc] + [">"] + [lig] + ["."] + [sol] + ["."] + [add] + [
+        ">"]
+    text = "".join(text)
+
+    drfp = DrfpEncoder.encode(text)[0]
+
+    return drfp
