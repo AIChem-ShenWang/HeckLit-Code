@@ -10,7 +10,7 @@ The project consists of 6 folders: data, data_process, exp, figures, models, uti
 
   * Suzuki_HTE: Suzuki-Miyaura reaction high-throughput  experimentation dataset
 
-  * Heck: Heck literature-based yield dataset, named "HeckLit", constructed based on Reaxys (https://www.reaxys.com), and Das et al. Heck experimental dataset, named "JCP". (_J. Chem. Phys._ **2025**, _156_, 114303)
+  * Heck: Heck literature-based yield dataset, named "HeckLit", constructed based on Reaxys (https://www.reaxys.com), and Das _et al._ Heck experimental dataset, named "JCP". (_J. Chem. Phys._ **2022**, _156_, 114303)
 
   * v1.5 Reaxys crawler: Reaxys crawler for extracting data from Reaxys website
 
