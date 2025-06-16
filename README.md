@@ -14,7 +14,7 @@ The project consists of 6 folders: data, data_process, exp, figures, models, uti
 
   * v1.5 Reaxys crawler: Reaxys crawler for extracting data from Reaxys website
 
-Among them, the excel file with "fp" contains the reaction represented by RXNFP & DRFP. the excel file with "RxnSmi" contains the reaction represented in Reaction SMILES format.
+Among them, the excel file with "fp" contains the reaction represented by RXNFP & DRFP.
 
 * data_process folder:
 
