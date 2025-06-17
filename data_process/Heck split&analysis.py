@@ -19,6 +19,7 @@ data_Suzuki = pd.read_excel("../data/Suzuki_HTE/Suzuki_HTE_fp.xlsx")
 # 2.convert df into rxn_class list
 rxn_list = df_to_rxn_list(data_Heck)
 
+
 # 3.divide into intra & inter and other subsets
 rxn_intra = list() # intra
 rxn_inter = list() # inter
@@ -221,8 +222,6 @@ ax[1].set_xticks([i for i in range(len(label))], label, rotation=40, fontsize=12
 plt.suptitle("Heck Reaction Diversity", fontsize=18)
 plt.tight_layout()
 plt.savefig("../figures/Reaction Diversity.png")
-# plt.show()
-
 
 # 5.analysis of temp, time & yield distribution
 # intra
@@ -291,7 +290,6 @@ for i in range(3):
 fig.suptitle("Time/Temperature/Yield Distribution for Heck Reaction", fontsize=18)
 plt.tight_layout()
 plt.savefig("../figures/Time Temperature Yield Distribution.png")
-# plt.show()
 
 
 # 6.Yield Distribution Compare with HTE
@@ -334,9 +332,9 @@ for p in vio_part:
     vp.set_edgecolor('#000')
     vp.set_alpha(.9)
 
-plt.xticks([1, 1.6, 2.2], ["Heck", "Buchwald HTE", "Suzuki HTE"], fontsize=10)
-plt.ylabel("Yield(%)", fontsize=10)
-plt.title("Yield for Different Datasets", fontsize=12)
+plt.xticks([1, 1.6, 2.2], ["HeckLit", "B-H", "S-M"], fontsize=14)
+plt.ylabel("Yield(%)", fontsize=14)
+plt.title("Yield for Different Datasets", fontsize=16)
 plt.tight_layout()
 plt.savefig("../figures/Yield Distribution Comparison.png")
 # plt.show()
@@ -359,7 +357,7 @@ yield_dict_list = [BH_yield_dict,
                    intra_yield_dist,
                    inter_yield_dist,
                    total_yield_dist]
-yield_name = ["Buchwald HTE", "Suzuki HTE", "Heck Intramolecular", "Heck Intermolecular", "Heck"]
+yield_name = ["B-H", "S-M", "HeckLit(Intra)", "HeckLit(Inter)", "HeckLit"]
 
 # Figure of Yield Distribution
 # BH
@@ -378,15 +376,15 @@ for i in range(5):
         if yield_dict[key][1] == "Many-shot":
             type[2] = b
 
-    plt.title("Yield for %s Dataset" % yield_name[i], fontsize=12)
-    plt.xlabel("Reaction Number", fontsize=8)
-    plt.ylabel("Yield", fontsize=8)
+    plt.title("Yield for %s Dataset" % yield_name[i], fontsize=16)
+    plt.xlabel("Reaction Number", fontsize=14)
+    plt.ylabel("Yield", fontsize=14)
     plt.legend(type, ["Few-shot", "Medium-shot", "Many-shot"])
     plt.tight_layout()
     plt.savefig("../figures/%s Yield Distribution.png" % yield_name[i])
 
 
-# 8.MDS analysis for RXNFP & DRFP
+# # 8.MDS analysis for RXNFP & DRFP
 # RXNFP
 # Heck
 HeckInter_rxnfp = list()
@@ -508,18 +506,18 @@ import seaborn as sns
 # RXNFP
 plt.figure(dpi=500)
 
-sns.kdeplot(fp_CosDensity(HeckInter_rxnfp), color=[55/255, 103/255, 149/255], label="HecK Intermolecular", fill=True)
-sns.kdeplot(fp_CosDensity(HeckIntra_rxnfp), color=[114/255, 188/255, 213/255], label="Heck Intramolecular", fill=True)
-sns.kdeplot(fp_CosDensity(HeckInter_rxnfp + HeckIntra_rxnfp), color="dodgerblue", label="Heck", fill=True)
-sns.kdeplot(fp_CosDensity(BH_rxnfp), color=[255/255, 208/255, 111/255], label="Buchwald HTE", fill=True)
-sns.kdeplot(fp_CosDensity(Suzuki_rxnfp), color=[231/255, 98/255, 84/255], label="Suzuki HTE", fill=True)
+# sns.kdeplot(fp_CosDensity(HeckInter_rxnfp), color=[55/255, 103/255, 149/255], label="HecK Intermolecular", fill=True)
+# sns.kdeplot(fp_CosDensity(HeckIntra_rxnfp), color=[114/255, 188/255, 213/255], label="Heck Intramolecular", fill=True)
+sns.kdeplot(fp_CosDensity(BH_rxnfp), color=[255/255, 208/255, 111/255], label="B-H", fill=True)
+sns.kdeplot(fp_CosDensity(Suzuki_rxnfp), color=[231/255, 98/255, 84/255], label="S-M", fill=True)
+sns.kdeplot(fp_CosDensity(HeckInter_rxnfp + HeckIntra_rxnfp), color="dodgerblue", label="HeckLit", fill=True)
 
-plt.legend()
+plt.legend(prop={'size': 12})
 plt.xlim([0, 1])
-plt.xlabel("Cosine Similarity", fontsize=11)
-plt.ylabel("Density", fontsize=11)
+plt.xlabel("Cosine Similarity", fontsize=14)
+plt.ylabel("Density", fontsize=14)
 plt.yticks([])
-plt.title("Cosine Similarity Distribution(RXNFP)", fontsize=14)
+plt.title("Cosine Similarity Distribution(RXNFP)", fontsize=16)
 plt.tight_layout()
 plt.savefig("../figures/RXNFP Cosine Similarity density.png")
 # plt.show()
@@ -527,21 +525,20 @@ plt.savefig("../figures/RXNFP Cosine Similarity density.png")
 # DRFP
 plt.figure(dpi=500)
 
-sns.kdeplot(fp_CosDensity(HeckInter_drfp), color=[55/255, 103/255, 149/255], label="Heck Intermolecular", fill=True)
-sns.kdeplot(fp_CosDensity(HeckIntra_drfp), color=[114/255, 188/255, 213/255], label="Heck Intramolecular", fill=True)
-sns.kdeplot(fp_CosDensity(HeckInter_drfp + HeckIntra_drfp), color="dodgerblue", label="Heck", fill=True)
-sns.kdeplot(fp_CosDensity(BH_drfp), color=[255/255, 208/255, 111/255], label="Buchwald HTE", fill=True)
-sns.kdeplot(fp_CosDensity(Suzuki_drfp), color=[231/255, 98/255, 84/255], label="Suzuki HTE", fill=True)
+# sns.kdeplot(fp_CosDensity(HeckInter_drfp), color=[55/255, 103/255, 149/255], label="Heck Intermolecular", fill=True)
+# sns.kdeplot(fp_CosDensity(HeckIntra_drfp), color=[114/255, 188/255, 213/255], label="Heck Intramolecular", fill=True)
+sns.kdeplot(fp_CosDensity(BH_drfp), color=[255/255, 208/255, 111/255], label="B-H", fill=True)
+sns.kdeplot(fp_CosDensity(Suzuki_drfp), color=[231/255, 98/255, 84/255], label="S-M", fill=True)
+sns.kdeplot(fp_CosDensity(HeckInter_drfp + HeckIntra_drfp), color="dodgerblue", label="HeckLit", fill=True)
 
-plt.legend()
+plt.legend(prop={'size': 12})
 plt.xlim([0, 1])
-plt.xlabel("Cosine Similarity", fontsize=11)
-plt.ylabel("Density", fontsize=11)
+plt.xlabel("Cosine Similarity", fontsize=14)
+plt.ylabel("Density", fontsize=14)
 plt.yticks([])
-plt.title("Cosine Similarity Distribution(DRFP)", fontsize=14)
+plt.title("Cosine Similarity Distribution(DRFP)", fontsize=16)
 plt.tight_layout()
 plt.savefig("../figures/DRFP Cosine Similarity density.png")
-# plt.show()
 
 
 # 10.analysis of database quality
@@ -576,7 +573,6 @@ for i in range(3):
     ax[i].tick_params(axis='y', labelsize=12)
 plt.tight_layout()
 plt.savefig("../figures/Reagents Diversity.png")
-# plt.show()
 
 
 # 11.t-SNE for Reactants, Reagents, Reactants + Reagents
@@ -676,6 +672,7 @@ df_inter.to_excel("../data/Heck/Intermolecular data DR.xlsx")
 data_BH.to_excel("../data/BH_HTE/BH_HTE DR.xlsx")
 data_Suzuki.to_excel("../data/Suzuki_HTE/Suzuki_HTE DR.xlsx")
 
+
 # 11. The effect of solvent & cat
 # 11.1 Solvent polarity effect on yield
 sols_dict = {"Polar":[],
@@ -695,7 +692,7 @@ for i in range(len(rxn_list)):
     if "Polar" not in sols_type and "Nonpolar" in sols_type:
         sols_dict["Nonpolar"].append(rxn.rxn_yield)
 
-plt.figure(dpi=500, figsize=(10, 7))
+plt.figure(dpi=500, figsize=(12, 7))
 sols_name = []
 yield_distribution = []
 for key in sols_dict.keys():
@@ -704,10 +701,11 @@ for key in sols_dict.keys():
 
 # Plot
 plt.violinplot(yield_distribution, showmeans=True)
-plt.title("Solvent Effect", fontsize=16)
-plt.xlabel("Solvent Polarity", fontsize=14)
-plt.xticks(np.linspace(1, len(sols_name), len(sols_name)), sols_name, fontsize=12)
-plt.ylabel("Yield (%)", fontsize=14)
+plt.title("Solvent Effect", fontsize=20)
+plt.xlabel("Solvent Polarity", fontsize=18)
+plt.xticks(np.linspace(1, len(sols_name), len(sols_name)), sols_name, fontsize=16)
+plt.ylabel("Yield (%)", fontsize=18)
+plt.yticks(fontsize=16)
 plt.ylim(0, 100)
 plt.grid(True, alpha=0.7, linestyle="--")
 plt.tight_layout()
@@ -753,10 +751,16 @@ for j in range(len(cat_name)):
 
 # Plot
 plt.violinplot(yield_distribution, showmeans=True)
-plt.title("Pd Catalyst Effect", fontsize=16)
-plt.xlabel("Pd Catalyst", fontsize=14)
-plt.xticks(np.linspace(1, top_num, top_num), cat_name, fontsize=9)
-plt.ylabel("Yield (%)", fontsize=14)
+plt.title("Pd Catalyst Effect", fontsize=20)
+plt.xlabel("Pd Catalyst", fontsize=18)
+
+# plt.xticks(np.linspace(1, top_num, top_num), cat_name, fontsize=9)
+# As you already converted SMILES to IUPAC
+cat_name = ["Pd(OAc)$_2$", "PdCl$_2$(PPh$_3$)$_2$", "Pd(PPh$_3$)$_4$", "Pd$_2$(dba)$_3$", "PdCl$_2$", "Pd(P$^{t-}$Bu$_3$)$_4$", "Pd(dba)$_2$"]
+plt.xticks(np.linspace(1, top_num, top_num), cat_name, fontsize=16)
+
+plt.ylabel("Yield (%)", fontsize=18)
+plt.yticks(fontsize=16)
 plt.ylim(0, 100)
 plt.grid(True, alpha=0.7, linestyle="--")
 plt.tight_layout()
