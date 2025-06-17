@@ -756,7 +756,7 @@ plt.xlabel("Pd Catalyst", fontsize=18)
 
 # plt.xticks(np.linspace(1, top_num, top_num), cat_name, fontsize=9)
 # As you already converted SMILES to IUPAC
-cat_name = ["Pd(OAc)$_2$", "PdCl$_2$(PPh$_3$)$_2$", "Pd(PPh$_3$)$_4$", "Pd$_2$(dba)$_3$", "PdCl$_2$", "Pd(P$^{t-}$Bu$_3$)$_4$", "Pd(dba)$_2$"]
+cat_name = ["Pd(OAc)$_2$", "PdCl$_2$(PPh$_3$)$_2$", "Pd(PPh$_3$)$_4$", "Pd$_2$(dba)$_3$", "PdCl$_2$", "Pd(P(t-Bu)$_3$)$_4$", "Pd(dba)$_2$"]
 plt.xticks(np.linspace(1, top_num, top_num), cat_name, fontsize=16)
 
 plt.ylabel("Yield (%)", fontsize=18)
