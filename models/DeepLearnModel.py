@@ -68,31 +68,31 @@ class GATU(nn.Module):
 
         return x
 
-class GCNU(nn.Module):
-    def __init__(self, node_feature_num, channels):
-        super(GCNU, self).__init__()
-        self.conv1 = pyg_nn.GCNConv(node_feature_num, channels[0])
-        self.norm1 = nn.BatchNorm1d(channels[0])
-        self.conv2 = pyg_nn.GCNConv(channels[0], channels[1])
+# GAT
+class GAT(nn.Module):
+    def __init__(self, node_feature_num, EncoderChannels, heads, DecoderChannels):
+        super(GAT, self).__init__()
+        assert len(EncoderChannels) == 2
+        assert len(DecoderChannels) == 2
+        self.encoder = GATU(node_feature_num, EncoderChannels, heads)
+        self.emb_size = 0
+        for i in EncoderChannels:
+            self.emb_size += i * heads
+        self.emb_size = self.emb_size * 2
+        self.decoder = nn.Sequential(
+            nn.Linear(self.emb_size, DecoderChannels[0]),
+            nn.ReLU(),
+            nn.Linear(DecoderChannels[0], DecoderChannels[1]),
+            nn.ReLU(),
+            nn.Linear(DecoderChannels[1], 1)
+        )
 
     def forward(self, data):
-        x = data["x"].clone().detach().float()
-        edge_index = data["edge_index"].clone().detach()
-        batch = data["batch"].clone().detach()
+        # Encoder
+        x = self.encoder(data)
 
-        # GAT
-        x1 = self.conv1(x, edge_index)
-        x1 = self.norm1(x1)
-        x1 = F.relu(x1)
-
-        x2 = self.conv2(x1, edge_index)
-        x2 = F.relu(x2)
-        x = torch.cat([x1, x2], 1)
-
-        # Pooling
-        x_mean = pyg_nn.global_mean_pool(x, batch=batch)
-        x_max = pyg_nn.global_max_pool(x, batch=batch)
-        x = torch.cat([x_mean, x_max], 1)
+        # Decoder
+        x = self.decoder(x)
 
         return x
 
@@ -263,159 +263,6 @@ class MMHRP_GCL(nn.Module):
 
         return x
 
-class MMHRP_GFP(nn.Module):
-    def __init__(self,
-                 GraphEncoder: dict,
-                 FPEncoder: dict,
-                 ModalityAlignment: dict,
-                 Decoder: dict,
-                 emb_size: int = 128, # embedding vector size for each encoder
-                 device: str = torch.device('cuda'),
-                 FDS=None
-                 ):
-        super(MMHRP_GFP, self).__init__()
-
-        # device
-        self.device = device
-        self.GraphEncoder = GraphEncoder
-        self.FPEncoder = FPEncoder
-        self.FDS = FDS
-
-        # 1.Encoder Parser
-        # 1.1 GraphEncoder Parser
-        Graph_params = ["Type", "NodeFeatNum", "Channels", "Heads"]
-        for key in GraphEncoder.keys():
-            if key not in Graph_params:
-                raise Exception("%s is not the param in Graph Encoder")
-
-            if key == "Type":
-                t = GraphEncoder[key]
-                type = ["GAT", "GCN"]
-                if t not in type:
-                    raise Exception("%s is not a Graph Encoder Type")
-            if key == "NodeFeatNum":
-                NodeFeatNum = GraphEncoder[key]  # 8
-            if key == "Channels":
-                GE_Channels = GraphEncoder[key]  # [32, 64]
-                assert len(GE_Channels) == 2
-            if key == "Heads":
-                GAT_Heads = GraphEncoder[key]  # 4
-
-        # GATU output size
-        GE_OutSize = 0
-        if t == "GAT":
-            for i in GE_Channels:
-                GE_OutSize += i * GAT_Heads
-        self.GE_OutSize = GE_OutSize * 2
-
-        # GraphEncoder
-        if t == "GAT":
-            self.ReaPro = GATU(NodeFeatNum, GE_Channels, GAT_Heads)
-            self.CatSol = GATU(NodeFeatNum, GE_Channels, GAT_Heads)
-        if t == "GCN":
-            self.ReaPro = GCNU(NodeFeatNum, GE_Channels)
-            self.CatSol = GCNU(NodeFeatNum, GE_Channels)
-        # GATU for Reactants and Products
-        self.ReaProEncoder = nn.Sequential(
-            self.ReaPro,
-            nn.Linear(self.GE_OutSize, int(emb_size/2))
-        )
-        # GATU for Catalysts and Solvents
-        self.CatSolEncoder = nn.Sequential(
-            self.GATU_CatSol,
-            nn.Linear(self.GE_OutSize, int(emb_size/2))
-        )
-
-        # 1.2 FingerPrintEncoder Parser
-        FP_params = ["FPSize", "Channels"]
-        for key in FPEncoder.keys():
-            if key not in FP_params:
-                raise Exception("%s is not the param in FingerPrint Encoder")
-
-            if key == "FPSize":
-                FPSize = FPEncoder[key] # len_drfp
-
-            if key == "Channels":
-                FP_Channels = FPEncoder[key]  # [256, 256]
-                assert len(FP_Channels) == 2
-
-        # FPEncoder
-        self.FPEncoder = nn.Sequential(
-            nn.Linear(FPSize, FP_Channels[0]),
-            nn.ReLU(),
-            nn.Linear(FP_Channels[0], FP_Channels[1]),
-            nn.ReLU(),
-            nn.Linear(FP_Channels[1], emb_size)
-        )
-
-        # 3. Modality Alignment Parser
-        MA_params = ["Heads"]
-        for key in ModalityAlignment.keys():
-            if key not in MA_params:
-                raise Exception("%s is not the param in ModalityAlignment")
-
-            if key == "Heads":
-                MA_Heads = ModalityAlignment[key]  # 4
-
-        self.MA = nn.TransformerEncoderLayer(d_model=emb_size * 2, nhead=MA_Heads)
-
-        # 4. Decoder Parser
-        Decoder_params = ["Channels"]
-        for key in Decoder.keys():
-            if key not in Decoder_params:
-                raise Exception("%s is not the param in Decoder")
-
-            if key == "Channels":
-                Decoder_Channels = Decoder[key]  # [1000, 500, 100]
-                assert len(Decoder_Channels) == 3
-
-        # Decoder
-        self.decoder = nn.Sequential(
-            nn.Linear(emb_size * 2, Decoder_Channels[0]),
-            nn.ReLU(),
-            nn.BatchNorm1d(Decoder_Channels[0]),
-
-            nn.Linear(Decoder_Channels[0], Decoder_Channels[1]),
-            nn.ReLU(),
-
-            nn.Linear(Decoder_Channels[1], Decoder_Channels[2]),
-            nn.ReLU(),
-
-            nn.Linear(Decoder_Channels[2], 1)
-        )
-
-
-    def forward(self, x, y=None, epoch=None, device=None):
-        # import data
-        ReaPro_data, CatSol_data, FP = x
-        # Graph Modality
-        graph_emb = torch.cat([self.ReaProEncoder(ReaPro_data),
-                                   self.CatSolEncoder(CatSol_data)], dim=1)
-        # FP Modality
-        FP_embed = self.FPEncoder(FP)
-        x = torch.cat([graph_emb, FP_embed], dim=1)
-
-
-        # Modality Alignment
-        x = self.MA(x)
-
-        # FDS operation
-        if self.FDS is not None:
-            if epoch >= 1:
-                self.FDS.cpu()
-                x = self.FDS.smooth(x.cpu(), y.cpu(), epoch).to(device)
-                y = y.to(device)
-
-        # Decoder
-        x = self.decoder(x)
-
-        return x
-
-    def GetLatentVector(self, x):
-        # import data
-        ReaPro_data, CatSol_data, RxnSmi = x
-
-        return self.ReaProEncoder(ReaPro_data), self.CatSolEncoder(CatSol_data), self.FPEncoder(RxnSmi)
 
 # Model Evaluation Function
 def RMSE(pred, true):
