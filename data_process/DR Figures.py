@@ -116,6 +116,17 @@ Suzuki_drfp_MDS2 = Suzuki_data["Suzuki_drfp_MDS2"]
 # MDS
 # rxnfp
 plt.figure(dpi=500, figsize=(5, 5))
+# BH
+plt.scatter(BH_rxnfp_MDS1,
+            BH_rxnfp_MDS2,
+            color=data_color["BH"],
+            marker=".", s=75, alpha=0.8)
+
+# Suzuki
+plt.scatter(Suzuki_rxnfp_MDS1,
+            Suzuki_rxnfp_MDS2,
+            color=data_color["Suzuki"],
+            marker=".", s=75, alpha=0.8)
 
 # inter
 plt.scatter(inter_rxnfp_MDS1,
@@ -129,42 +140,18 @@ plt.scatter(intra_rxnfp_MDS1,
             color=data_color["Intra"],
             marker=".", s=75, alpha=0.8)
 
-# BH
-plt.scatter(BH_rxnfp_MDS1,
-            BH_rxnfp_MDS2,
-            color=data_color["BH"],
-            marker=".", s=75, alpha=0.8)
-
-# Suzuki
-plt.scatter(Suzuki_rxnfp_MDS1,
-            Suzuki_rxnfp_MDS2,
-            color=data_color["Suzuki"],
-            marker=".", s=75, alpha=0.8)
-
-plt.xlabel("MDS1", fontsize=11)
-plt.ylabel("MDS2", fontsize=11)
+plt.xlabel("MDS1", fontsize=14)
+plt.ylabel("MDS2", fontsize=14)
 plt.xticks([])
 plt.yticks([])
-plt.title("MDS analysis(RXNFP)", fontsize=14)
-plt.legend(["Intermolecular Heck", "Intramolecular Heck", "Buchwald HTE", "Suzuki HTE"], loc="best", prop={'size': 11})
+plt.title("MDS Analysis(RXNFP)", fontsize=16)
+plt.legend(["B-H", "S-M", "HeckLit(Inter)", "HeckLit(Intra)"], loc="best", prop={'size': 12})
 plt.tight_layout()
 plt.savefig("../figures/RXNFP MDS Analysis.png")
 # plt.show()
 
 # drfp
 plt.figure(dpi=500, figsize=(5, 5))
-# inter
-plt.scatter(inter_drfp_MDS1,
-            inter_drfp_MDS2,
-            color=data_color["Inter"],
-            marker=".", s=75, alpha=0.8)
-
-# intra
-plt.scatter(intra_drfp_MDS1,
-            intra_drfp_MDS2,
-            color=data_color["Intra"],
-            marker=".", s=75, alpha=0.8)
-
 # BH
 plt.scatter(BH_drfp_MDS1,
             BH_drfp_MDS2,
@@ -177,15 +164,27 @@ plt.scatter(Suzuki_drfp_MDS1,
             color=data_color["Suzuki"],
             marker=".", s=75, alpha=0.8)
 
-plt.xlabel("MDS1", fontsize=11)
-plt.ylabel("MDS2", fontsize=11)
+# inter
+plt.scatter(inter_drfp_MDS1,
+            inter_drfp_MDS2,
+            color=data_color["Inter"],
+            marker=".", s=75, alpha=0.8)
+
+# intra
+plt.scatter(intra_drfp_MDS1,
+            intra_drfp_MDS2,
+            color=data_color["Intra"],
+            marker=".", s=75, alpha=0.8)
+
+plt.xlabel("MDS1", fontsize=14)
+plt.ylabel("MDS2", fontsize=14)
 plt.xticks([])
 plt.yticks([])
-plt.title("MDS analysis(DRFP)", fontsize=14)
-plt.legend(["Intermolecular Heck", "Intramolecular Heck", "Buchwald HTE", "Suzuki HTE"], loc="best", prop={'size': 11})
+plt.title("MDS Analysis(DRFP)", fontsize=16)
+plt.legend(["B-H", "S-M", "HeckLit(Inter)", "HeckLit(Intra)", ], loc="best", prop={'size': 12})
 plt.tight_layout()
 plt.savefig("../figures/DRFP MDS Analysis.png")
-# plt.show()
+
 
 # t-SNE
 # RXNFP
@@ -282,4 +281,4 @@ for i in range(3):
 plt.suptitle("Reaction Space described by t-SNE(DRFP)", fontsize=16)
 plt.tight_layout()
 plt.savefig("../figures/DRFP t-SNE Analysis.png")
-# plt.show()
+plt.show()
