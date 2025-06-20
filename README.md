@@ -1,4 +1,4 @@
-This project is the code for the paper "HeckLit: A benchmarking study of a literature-based large-scale Heck reaction yield dataset", including the dataset used and the code for dataset processing & analysis, model training & testing.
+This project is the code for the paper "Optimizing model learning performance on challenging Heck reaction yield dataset", including the dataset used and the code for dataset processing & analysis, model training & testing.
 
 The project uses Python in combination with the CPU & GPU provided by the Colab (https://colab.research.google.com) to build and train the model.The required python version and python libraries are listed in pkgs.txt.
 
@@ -39,8 +39,6 @@ Among them, the excel file with "fp" contains the reaction represented by RXNFP 
     * Ablation.ipynb: Ablation study of reagents' information.
 
     * FDS.ipynb: Feature Distribution Smooth (FDS) method to improve the model learning performance on HeckLit.
-
-    * Generalization.ipynb: Model generalization test using low-shot and medium shot reactions to train and many-shot cases to test.
 
     * ShotErrorPlot.ipynb: Model testing error distribution caused by reaction yield distribution.
 
