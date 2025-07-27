@@ -42,7 +42,7 @@ Among them, the excel file with "fp" contains the reaction represented by RXNFP 
 
     * ShotErrorPlot.ipynb: Model testing error distribution caused by reaction yield distribution.
 
-    * STS.ipynb: Subset Splitting training strategy (SSTS) to improve the model learning performance on HeckLit.
+    * SSTS.ipynb: Subset Splitting training strategy (SSTS) to improve the model learning performance on HeckLit.
 
     * Subset_Benchmark.ipynb: The code for setting the benchmark of the subsets in HeckLit.
 
