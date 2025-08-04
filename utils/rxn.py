@@ -691,8 +691,8 @@ def Heck_filter2(rxn):
 
 
 # 3. Convert RXN SMILES into RXNFP or DRFP
-# from rxnfp.transformer_fingerprints import *
-# from drfp import DrfpEncoder
+from rxnfp.transformer_fingerprints import *
+from drfp import DrfpEncoder
 
 # read rxnfp and drfp
 def read_rxnfp(arr_str):
