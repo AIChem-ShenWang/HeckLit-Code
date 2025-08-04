@@ -538,7 +538,7 @@ def InterCount(rxn_list, file):
         file.write("LG=%s Num:%d\n" % (X[i], X_Num[i]))
     file.write("\n")
 
-    return {"Alph-Insertion":AlphaInsert,
+    return {"Alpha-Insertion":AlphaInsert,
             "Beta-Insertion":BetaInsert,
             "LG = F":X_Num[0],
             "LG = Cl":X_Num[1],
@@ -691,8 +691,8 @@ def Heck_filter2(rxn):
 
 
 # 3. Convert RXN SMILES into RXNFP or DRFP
-from rxnfp.transformer_fingerprints import *
-from drfp import DrfpEncoder
+# from rxnfp.transformer_fingerprints import *
+# from drfp import DrfpEncoder
 
 # read rxnfp and drfp
 def read_rxnfp(arr_str):
@@ -822,94 +822,25 @@ def get_Heck_rxnfp(Heck_rxn):
 
     return rxnfp
 
-def get_Heck_React_rxnfp(Heck_rxn):
+def get_Heck_drfp(Heck_rxn, cats=True, sols=True):
     text = list()
     for reactant in Heck_rxn.reactants:
         text = text + [str(reactant)] + ["."]
 
-    text = text[:-1] + [">>"]
+    if cats:
+        for reagent in Heck_rxn.reagents:
+            text = text + [str(reagent)] + ["."]
 
-    text = text + [str(Heck_rxn.products[0])]
-    text = "".join(text)
+        for cat in Heck_rxn.cats:
+            text = text + [str(cat)] + ["."]
 
-    model, tokenizer = get_default_model_and_tokenizer()
-    rxnfp_generator = RXNBERTFingerprintGenerator(model, tokenizer)
-    rxnfp = rxnfp_generator.convert(text)
-
-    return rxnfp
-
-def get_Heck_Reagent_rxnfp(Heck_rxn):
-    text = [">"]
-
-    for reagent in Heck_rxn.reagents:
-        text = text + [str(reagent)] + ["."]
-
-    for cat in Heck_rxn.cats:
-        text = text + [str(cat)] + ["."]
-
-    for sol in Heck_rxn.solvents:
-        text = text + [str(sol)] + ["."]
-
-    text = text[:-1] + [">"]
-    text = "".join(text)
-
-    model, tokenizer = get_default_model_and_tokenizer()
-    rxnfp_generator = RXNBERTFingerprintGenerator(model, tokenizer)
-    rxnfp = rxnfp_generator.convert(text)
-
-    return rxnfp
-
-def get_Heck_drfp(Heck_rxn):
-    text = list()
-    for reactant in Heck_rxn.reactants:
-        text = text + [str(reactant)] + ["."]
-
-    for reagent in Heck_rxn.reagents:
-        text = text + [str(reagent)] + ["."]
-
-    for cat in Heck_rxn.cats:
-        text = text + [str(cat)] + ["."]
-
-    for sol in Heck_rxn.solvents:
-        text = text + [str(sol)] + ["."]
+    if sols:
+        for sol in Heck_rxn.solvents:
+            text = text + [str(sol)] + ["."]
 
     text = text[:-1] + [">>"]
 
     text = text + [str(Heck_rxn.products[0])]
-    text = "".join(text)
-
-    drfp = DrfpEncoder.encode(text)[0]
-
-    return drfp
-
-def get_Heck_React_drfp(Heck_rxn):
-    text = list()
-    for reactant in Heck_rxn.reactants:
-        text = text + [str(reactant)] + ["."]
-
-    text = text[:-1] + [">>"]
-
-    text = text + [str(Heck_rxn.products[0])]
-    text = "".join(text)
-
-    drfp = DrfpEncoder.encode(text)[0]
-
-    return drfp
-
-def get_Heck_Reagent_drfp(Heck_rxn):
-
-    text = [">"]
-
-    for reagent in Heck_rxn.reagents:
-        text = text + [str(reagent)] + ["."]
-
-    for cat in Heck_rxn.cats:
-        text = text + [str(cat)] + ["."]
-
-    for sol in Heck_rxn.solvents:
-        text = text + [str(sol)] + ["."]
-
-    text = text[:-1] + [">"]
     text = "".join(text)
 
     drfp = DrfpEncoder.encode(text)[0]

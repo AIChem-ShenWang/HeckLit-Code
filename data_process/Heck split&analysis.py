@@ -5,9 +5,7 @@ from utils.rxn import *
 from utils.dataset_analysis import *
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-from sklearn.manifold import TSNE
 import os
-import umap
 np.set_printoptions(threshold=np.inf)
 
 # 1.import data
@@ -171,7 +169,7 @@ total_res = HeckCount(rxn_list, file=report)
 report.close()
 
 # Counting Figure
-fig, ax = plt.subplots(ncols=2, dpi=500, figsize=(13, 5))
+fig, ax = plt.subplots(ncols=2, dpi=500, figsize=(14, 6))
 
 # Intra
 label = list()
@@ -191,11 +189,15 @@ for i in range(len(num)):
     if i > 5:
         ax[0].bar(x=i, height=num[i], color="#d0d8eb", edgecolor="#7195c5")
 for i in range(len(label)):
-    ax[0].text(i, num[i] + 0.8, '%.1f' % num[i] + "%", ha='center', va='center', fontsize=12)
+    ax[0].text(i+0.15, num[i] + 1.0, '%.1f' % num[i] + "%", ha='center', va='center', fontsize=14)
 
-ax[0].set_title("Intramolecular Dataset", fontsize=17)
-ax[0].set_ylabel("% of Intramolecular Dataset", fontsize=16)
-ax[0].set_xticks([i for i in range(len(label))], label, rotation=40, fontsize=12)
+ax[0].set_title("Intramolecular Dataset", fontsize=22)
+ax[0].set_ylabel("% of Intramolecular Dataset", fontsize=18)
+label = ["α-position\nInsertion" if item == "Alpha-Insertion" else item for item in label]
+label = ["β-position\nInsertion" if item == "Beta-Insertion" else item for item in label]
+label = [item.replace(" ", "\n") if "ring" in item else item for item in label]
+ax[0].set_xticks([i for i in range(len(label))], label, rotation=75, fontsize=17)
+ax[0].tick_params(axis='y', labelsize=16)
 
 # Inter
 label = list()
@@ -213,15 +215,19 @@ for i in range(len(num)):
 
 # label
 for i in range(len(label)):
-    ax[1].text(i, num[i] + 1.2, '%.1f' % num[i] + "%", ha='center', va='center', fontsize=12)
+    ax[1].text(i+0.07, num[i] + 1.2, '%.1f' % num[i] + "%", ha='center', va='center', fontsize=16)
 
-ax[1].set_title("Intermolecular Dataset", fontsize=17)
-ax[1].set_ylabel("% of Intermolecular Dataset", fontsize=16)
-ax[1].set_xticks([i for i in range(len(label))], label, rotation=40, fontsize=12)
+ax[1].set_title("Intermolecular Dataset", fontsize=22)
+ax[1].set_ylabel("% of Intermolecular Dataset", fontsize=18)
+label = ["α-position\nInsertion" if item == "Alpha-Insertion" else item for item in label]
+label = ["β-position\nInsertion" if item == "Beta-Insertion" else item for item in label]
+ax[1].set_xticks([i for i in range(len(label))], label, rotation=75, fontsize=17)
+ax[1].tick_params(axis='y', labelsize=16)
 
-plt.suptitle("Heck Reaction Diversity", fontsize=18)
+plt.suptitle("Heck Reaction Diversity", fontsize=25)
 plt.tight_layout()
 plt.savefig("../figures/Reaction Diversity.png")
+
 
 # 5.analysis of temp, time & yield distribution
 # intra
@@ -254,7 +260,7 @@ attr = ["Time", "Temperature", "Yield"]
 unit = ["h", "℃", "%"]
 name = ["Intramolecular", "Intermolecular"]
 
-fig, ax = plt.subplots(nrows=3, dpi=500, figsize=(8, 12))
+fig, ax = plt.subplots(nrows=3, dpi=500, figsize=(8, 13))
 ax[0].boxplot(np.array(intra_time_dis).astype(float), positions=[1])
 ax[0].boxplot(np.array(inter_time_dis).astype(float), positions=[1.8])
 
@@ -284,10 +290,11 @@ for p in vio_part:
 
 # beautify
 for i in range(3):
-    ax[i].set_ylabel("%s(%s)" % (attr[i], unit[i]), fontsize=14)
-    ax[i].set_xticks([1, 1.8], name, fontsize=14)
-    ax[i].set_title("%s Distribution" % attr[i], fontsize=16)
-fig.suptitle("Time/Temperature/Yield Distribution for Heck Reaction", fontsize=18)
+    ax[i].set_ylabel("%s(%s)" % (attr[i], unit[i]), fontsize=20)
+    ax[i].set_xticks([1, 1.8], name, fontsize=20)
+    ax[i].set_title("%s Distribution" % attr[i], fontsize=22)
+    ax[i].tick_params(axis='y', labelsize=20)
+fig.suptitle("Time/Temperature/Yield Distribution", fontsize=24)
 plt.tight_layout()
 plt.savefig("../figures/Time Temperature Yield Distribution.png")
 
@@ -565,7 +572,7 @@ ax[0].set_title("Intramolecular", fontsize=18)
 ax[1].set_title("Intermolecular", fontsize=18)
 ax[2].set_title("Total", fontsize=18)
 for i in range(3):
-    ax[i].legend(["catalysts", "solvents"], loc="lower right", prop={'size': 14})
+    ax[i].legend(["catalysts & \nadditives", "solvents"], loc="lower right", prop={'size': 14})
     ax[i].set_xlabel("Top N", fontsize=14)
     ax[i].set_ylabel("Reaction Coverage", fontsize=14)
     ax[i].grid(True, alpha=0.5, linestyle="--")
@@ -573,104 +580,6 @@ for i in range(3):
     ax[i].tick_params(axis='y', labelsize=12)
 plt.tight_layout()
 plt.savefig("../figures/Reagents Diversity.png")
-
-
-# 11.t-SNE for Reactants, Reagents, Reactants + Reagents
-# rxnfp
-# Intra
-# Reaction
-tsne = TSNE(n_components=2, n_iter=250, min_grad_norm=1e-6).fit(np.array(HeckIntra_rxnfp))
-embeded_tsne = tsne.fit_transform(np.array(HeckIntra_rxnfp))
-tsne1 = pd.DataFrame(embeded_tsne[:, 0], columns=["Intra_rxnfp_TSNE1"])
-tsne2 = pd.DataFrame(embeded_tsne[:, 1], columns=["Intra_rxnfp_TSNE2"])
-df_intra = pd.concat([df_intra, tsne1, tsne2], axis=1)
-
-# Only Reactants and products
-tsne = TSNE(n_components=2, n_iter=250, min_grad_norm=1e-6).fit(np.array(HeckIntra_react_rxnfp))
-embeded_tsne = tsne.fit_transform(np.array(HeckIntra_react_rxnfp))
-tsne1 = pd.DataFrame(embeded_tsne[:, 0], columns=["Intra_react_rxnfp_TSNE1"])
-tsne2 = pd.DataFrame(embeded_tsne[:, 1], columns=["Intra_react_rxnfp_TSNE2"])
-df_intra = pd.concat([df_intra, tsne1, tsne2], axis=1)
-
-# Only Reagent
-tsne = TSNE(n_components=2, n_iter=250, min_grad_norm=1e-6).fit(np.array(HeckIntra_reagent_rxnfp))
-embeded_tsne = tsne.fit_transform(np.array(HeckIntra_reagent_rxnfp))
-tsne1 = pd.DataFrame(embeded_tsne[:, 0], columns=["Intra_reagent_rxnfp_TSNE1"])
-tsne2 = pd.DataFrame(embeded_tsne[:, 1], columns=["Intra_reagent_rxnfp_TSNE2"])
-df_intra = pd.concat([df_intra, tsne1, tsne2], axis=1)
-
-# Inter
-# Reaction
-tsne = TSNE(n_components=2, n_iter=250, min_grad_norm=1e-6).fit(np.array(HeckInter_rxnfp))
-embeded_tsne = tsne.fit_transform(np.array(HeckInter_rxnfp))
-tsne1 = pd.DataFrame(embeded_tsne[:, 0], columns=["Inter_rxnfp_TSNE1"])
-tsne2 = pd.DataFrame(embeded_tsne[:, 1], columns=["Inter_rxnfp_TSNE2"])
-df_inter = pd.concat([df_inter, tsne1, tsne2], axis=1)
-
-# Only Reactants and products
-tsne = TSNE(n_components=2, n_iter=250, min_grad_norm=1e-6).fit(np.array(HeckInter_react_rxnfp))
-embeded_tsne = tsne.fit_transform(np.array(HeckInter_react_rxnfp))
-tsne1 = pd.DataFrame(embeded_tsne[:, 0], columns=["Inter_react_rxnfp_TSNE1"])
-tsne2 = pd.DataFrame(embeded_tsne[:, 1], columns=["Inter_react_rxnfp_TSNE2"])
-df_inter = pd.concat([df_inter, tsne1, tsne2], axis=1)
-
-# Only Reagent
-tsne = TSNE(n_components=2, n_iter=250, min_grad_norm=1e-6).fit(np.array(HeckInter_reagent_rxnfp))
-embeded_tsne = tsne.fit_transform(np.array(HeckInter_reagent_rxnfp))
-tsne1 = pd.DataFrame(embeded_tsne[:, 0], columns=["Inter_reagent_rxnfp_TSNE1"])
-tsne2 = pd.DataFrame(embeded_tsne[:, 1], columns=["Inter_reagent_rxnfp_TSNE2"])
-df_inter = pd.concat([df_inter, tsne1, tsne2], axis=1)
-
-# drfp
-# Intra
-# Reaction
-tsne = TSNE(n_components=2, n_iter=250, min_grad_norm=1e-6).fit(np.array(HeckIntra_drfp))
-embeded_tsne = tsne.fit_transform(np.array(HeckIntra_drfp))
-tsne1 = pd.DataFrame(embeded_tsne[:, 0], columns=["Intra_drfp_TSNE1"])
-tsne2 = pd.DataFrame(embeded_tsne[:, 1], columns=["Intra_drfp_TSNE2"])
-df_intra = pd.concat([df_intra, tsne1, tsne2], axis=1)
-
-# Only Reactants and products
-tsne = TSNE(n_components=2, n_iter=250, min_grad_norm=1e-6).fit(np.array(HeckIntra_react_drfp))
-embeded_tsne = tsne.fit_transform(np.array(HeckIntra_react_drfp))
-tsne1 = pd.DataFrame(embeded_tsne[:, 0], columns=["Intra_react_drfp_TSNE1"])
-tsne2 = pd.DataFrame(embeded_tsne[:, 1], columns=["Intra_react_drfp_TSNE2"])
-df_intra = pd.concat([df_intra, tsne1, tsne2], axis=1)
-
-# Only Reagent
-tsne = TSNE(n_components=2, n_iter=250, min_grad_norm=1e-6).fit(np.array(HeckIntra_reagent_drfp))
-embeded_tsne = tsne.fit_transform(np.array(HeckIntra_reagent_drfp))
-tsne1 = pd.DataFrame(embeded_tsne[:, 0], columns=["Intra_reagent_drfp_TSNE1"])
-tsne2 = pd.DataFrame(embeded_tsne[:, 1], columns=["Intra_reagent_drfp_TSNE2"])
-df_intra = pd.concat([df_intra, tsne1, tsne2], axis=1)
-
-# Inter
-# Reaction
-tsne = TSNE(n_components=2, n_iter=250, min_grad_norm=1e-6).fit(np.array(HeckInter_drfp))
-embeded_tsne = tsne.fit_transform(np.array(HeckInter_drfp))
-tsne1 = pd.DataFrame(embeded_tsne[:, 0], columns=["Inter_drfp_TSNE1"])
-tsne2 = pd.DataFrame(embeded_tsne[:, 1], columns=["Inter_drfp_TSNE2"])
-df_inter = pd.concat([df_inter, tsne1, tsne2], axis=1)
-
-# Only Reactants and products
-tsne = TSNE(n_components=2, n_iter=250, min_grad_norm=1e-6).fit(np.array(HeckInter_react_drfp))
-embeded_tsne = tsne.fit_transform(np.array(HeckInter_react_drfp))
-tsne1 = pd.DataFrame(embeded_tsne[:, 0], columns=["Inter_react_drfp_TSNE1"])
-tsne2 = pd.DataFrame(embeded_tsne[:, 1], columns=["Inter_react_drfp_TSNE2"])
-df_inter = pd.concat([df_inter, tsne1, tsne2], axis=1)
-
-# Only Reagent
-tsne = TSNE(n_components=2, n_iter=250, min_grad_norm=1e-6).fit(np.array(HeckInter_reagent_drfp))
-embeded_tsne = tsne.fit_transform(np.array(HeckInter_reagent_drfp))
-tsne1 = pd.DataFrame(embeded_tsne[:, 0], columns=["Inter_reagent_drfp_TSNE1"])
-tsne2 = pd.DataFrame(embeded_tsne[:, 1], columns=["Inter_reagent_drfp_TSNE2"])
-df_inter = pd.concat([df_inter, tsne1, tsne2], axis=1)
-
-# Generate DR data
-df_intra.to_excel("../data/Heck/Intramolecular data DR.xlsx")
-df_inter.to_excel("../data/Heck/Intermolecular data DR.xlsx")
-data_BH.to_excel("../data/BH_HTE/BH_HTE DR.xlsx")
-data_Suzuki.to_excel("../data/Suzuki_HTE/Suzuki_HTE DR.xlsx")
 
 
 # 11. The effect of solvent & cat

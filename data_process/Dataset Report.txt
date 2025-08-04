@@ -31,6 +31,6 @@ LG=* Num:227
 Reactants Num:6718
 Products Num:8891
 Catalysts with Pd Num:45
-Catalysts without Pd Num:293
-Solvents Num:60
+Catalysts without Pd Num:292
+Solvents Num:59
 

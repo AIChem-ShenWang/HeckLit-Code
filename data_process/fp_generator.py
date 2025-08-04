@@ -14,34 +14,30 @@ np.set_printoptions(threshold=np.inf)
 # Heck
 # HeckLit
 Heck_rxnfp = list()
-Heck_React_rxnfp = list()
-Heck_Reagent_rxnfp = list()
 Heck_drfp = list()
 Heck_React_drfp = list()
-Heck_Reagent_drfp = list()
+Heck_wo_cats_drfp = list()
+Heck_wo_sols_drfp = list()
 
 for i in tqdm(range(len(Heck_rxn))):
     rxn = Heck_rxn[i]
 
     Heck_rxnfp.append(str(get_Heck_rxnfp(rxn)))
-    Heck_React_rxnfp.append(str(get_Heck_React_rxnfp(rxn)))
-    Heck_Reagent_rxnfp.append(str(get_Heck_Reagent_rxnfp(rxn)))
-
     Heck_drfp.append(str(get_Heck_drfp(rxn)))
-    Heck_React_drfp.append(str(get_Heck_React_drfp(rxn)))
-    Heck_Reagent_drfp.append(str(get_Heck_Reagent_drfp(rxn)))
+    Heck_React_drfp.append(str(get_Heck_drfp(rxn, cats=False, sols=False)))
+    Heck_wo_cats_drfp.append(str(get_Heck_drfp(rxn, cats=False, sols=True)))
+    Heck_wo_sols_drfp.append(str(get_Heck_drfp(rxn, cats=True, sols=False)))
+
 
 Heck_rxnfp = pd.DataFrame(Heck_rxnfp, columns=["rxnfp"])
-Heck_React_rxnfp = pd.DataFrame(Heck_React_rxnfp, columns=["rxnfp React"])
-Heck_Reagent_rxnfp = pd.DataFrame(Heck_Reagent_rxnfp, columns=["rxnfp Reagent"])
-
 Heck_drfp = pd.DataFrame(Heck_drfp, columns=["drfp"])
 Heck_React_drfp = pd.DataFrame(Heck_React_drfp, columns=["drfp React"])
-Heck_Reagent_drfp = pd.DataFrame(Heck_Reagent_drfp, columns=["drfp Reagent"])
+Heck_wo_cats_drfp = pd.DataFrame(Heck_wo_cats_drfp, columns=["drfp wo cats"])
+Heck_wo_sols_drfp = pd.DataFrame(Heck_wo_sols_drfp, columns=["drfp wo sols"])
 
 Hcek_df = pd.concat([data_Heck,
-                     Heck_rxnfp, Heck_React_rxnfp, Heck_Reagent_rxnfp,
-                     Heck_drfp, Heck_React_drfp, Heck_Reagent_drfp], axis=1)
+                     Heck_rxnfp,
+                     Heck_drfp, Heck_React_drfp, Heck_wo_cats_drfp, Heck_wo_sols_drfp], axis=1)
 Hcek_df.to_excel("../data/Heck/Heck_fp.xlsx")
 
 # JCP
