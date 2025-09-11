@@ -1,4 +1,4 @@
-This project is the code for the paper "Optimizing model learning performance on challenging Heck reaction yield dataset", including the dataset used and the code for dataset processing & analysis, model training & testing.
+This project is the code for the paper "Optimizing Model Learning Performance on a Challenging Heck Reaction Yield Data Set", including the dataset used and the code for dataset processing & analysis, model training & testing. The paper is published on _J. Org. Chem._ **2025**, _XX_, XXX – XXX. (https://pubs.acs.org/doi/10.1021/acs.joc.5c01641)
 
 The project uses Python in combination with the CPU & GPU provided by Colab (https://colab.research.google.com) to build and train the model. The required Python version and Python libraries are listed in the pkgs.txt file.
 
@@ -56,7 +56,7 @@ Among them, the Excel file with "fp" contains the reaction represented by RXNFP 
 
   * DeepLearnModel.py: The framework of Artificial Neural Network (ANN), GAT, and MMHRP-GCL proposed by us. (_Chin. J. Chem._ **2025**, _43_, 1230 – 1238). Other ML models are built by the sklearn Python package.
 
-  * fds.py: Feature distribution smooth operation. Code is from Yang et al. (arXiv 2021, DOI: arXiv:2102.09554).
+  * fds.py: Feature distribution smooth operation. Code is from Yang et al. (_arXiv_ **2021**, DOI: arXiv:2102.09554).
 
   * smi2vec.py: Smi2Vec models for generating vocab dict for each atom.
 
