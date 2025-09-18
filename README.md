@@ -1,4 +1,4 @@
-This project is the code for the paper "Optimizing Model Learning Performance on a Challenging Heck Reaction Yield Data Set", including the dataset used and the code for dataset processing & analysis, model training & testing. The paper is published on _J. Org. Chem._ **2025**, _XX_, XXX – XXX. (https://pubs.acs.org/doi/10.1021/acs.joc.5c01641)
+This project is the code for the paper "Optimizing Model Learning Performance on a Challenging Heck Reaction Yield Data Set", including the dataset used and the code for dataset processing & analysis, model training & testing. The paper is published on _J. Org. Chem._ **2025**, _90_, 12768 – 12777. (https://pubs.acs.org/doi/10.1021/acs.joc.5c01641)
 
 The project uses Python in combination with the CPU & GPU provided by Colab (https://colab.research.google.com) to build and train the model. The required Python version and Python libraries are listed in the pkgs.txt file.
 
